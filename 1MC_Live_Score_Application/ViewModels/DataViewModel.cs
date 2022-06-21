@@ -144,26 +144,17 @@ namespace _1MC_Live_Score_Application.ViewModels
 
         private void GetDriversPerTeam()
         {
-            //for (int i = 0; i < Team.Count; i++)
-            //{
-                //Team[i].NumDrivers = 0;
-            //}
-
             for (int i = 0; i < 22; i++)
             {
                 var driversTeam = Driver[i].Team;
 
                 for (int j = 0; j < Team.Count; j++)
                 {
-                    //int numDrivers = 0;
 
                     if (driversTeam == j + 1)
                     {
-                        //numDrivers = numDrivers + 1;
                         Team[j].NumDrivers += 1;
                     }
-
-                    //Team[j].NumDrivers = numDrivers;
 
                 }
             }
@@ -244,7 +235,7 @@ namespace _1MC_Live_Score_Application.ViewModels
                         Driver[i].PointsByPosition = PositionToPointsConverter.GetPoints(SettingsModel.PointsModel, Driver[i].CurrentPosition);
                     }
 
-                    //CalculateTeamPointsByPosition();
+                    CalculateTeamPointsByPosition();
 
                     //CalculateTeamPointsByPositionChange();
 
@@ -254,6 +245,34 @@ namespace _1MC_Live_Score_Application.ViewModels
 
                     //CalculateTotalTeamPoints();
                     
+                }
+            }
+        }
+
+        private void CalculateTeamPointsByPosition()
+        {
+
+            for (int i = 0; i < 22; i++)
+            {
+                var driversTeam = Driver[i].Team;
+
+                if (Driver[i].IsActive == true)
+                {
+                    var driversPointsByPosition = Driver[i].PointsByPosition;
+
+                    for (int j = 0; j < Team.Count; j++)
+                    {
+                        int activeDrivers = 0;
+
+                        if (driversTeam == j + 1)
+                        {
+                            activeDrivers = activeDrivers += 1;
+                            
+                            Team[j].PointsByPosition += driversPointsByPosition;
+                        }
+
+                        Team[j].NumActiveDrivers = activeDrivers;
+                    }
                 }
             }
         }
@@ -307,37 +326,6 @@ namespace _1MC_Live_Score_Application.ViewModels
                 //if (Team[i].PositionChanges == mostPositionChanges)
                 {
                     //Team[i].HasMostPositionChanges = 1;
-                }
-            }
-        }
-
-        private void CalculateTeamPointsByPosition()
-        {
-
-            for (int i = 0; i < 22; i++)
-            {
-                //var driversTeam = Driver[i].Team;
-
-                //for (int j = 0; j < Team.Count; j++)
-                {
-                    //if (driversTeam == j + 1)
-                    {
-                        //Team[j].NumDrivers += 1;
-                    }
-                }
-
-                //if (Driver[i].IsActive == true)
-                {
-                    //var driversPointsByPosition = Driver[i].PointsByPosition;
-
-                    //for (int j = 0; j < Team.Count; j++)
-                    {
-                        //if (driversTeam == j + 1)
-                        {
-                            //Team[j].NumActiveDrivers += 1;
-                            //Team[j].PointsByPosition += driversPointsByPosition;
-                        }
-                    }
                 }
             }
         }
