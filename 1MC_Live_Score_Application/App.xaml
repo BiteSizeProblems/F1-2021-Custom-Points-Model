@@ -1,0 +1,44 @@
+﻿<Application x:Class="_1MC_Live_Score_Application.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:_1MC_Live_Score_Application"
+             StartupUri="MainWindow.xaml">
+    
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!--// WINDOW & MENU THEMES //-->
+                <ResourceDictionary Source="./Core/Styles/HeaderTheme.xaml"/>
+                <ResourceDictionary Source="./Core/Styles/MainWindowBorderTheme.xaml"/>
+                <ResourceDictionary Source="./Core/Styles/SliderTheme.xaml"/>
+                <ResourceDictionary Source="./Core/Styles/TextBoxInputTheme.xaml"/>
+
+                <!--// NAVIGATION THEMES //-->
+
+                <!--// CONTENT DISPLAY THEMES //-->
+
+                <ResourceDictionary Source="./Core/Styles/DataGridTheme.xaml"/>
+                <ResourceDictionary Source="./Core/Styles/RadioButtonTheme.xaml"/>
+                <ResourceDictionary Source="./Core/Styles/ButtonTheme.xaml"/>
+
+                <!--// ALL APP DEFAULTS //-->
+                <ResourceDictionary>
+
+                    <FontFamily x:Key="SanFransiscoStyle">/Core/Fonts/SanFrancisco/#SFUIDisplay</FontFamily>
+                    <FontFamily x:Key="Formula1FontStyle">/Core/Fonts/#Formula1 Display</FontFamily>
+
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="{StaticResource Formula1FontStyle}"/>
+                        <Setter Property="TextElement.FontFamily" Value="{StaticResource Formula1FontStyle}"/>
+                        <Setter Property="FontSize" Value="12"/>
+                    </Style>
+
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Application.Resources>
+    
+</Application>

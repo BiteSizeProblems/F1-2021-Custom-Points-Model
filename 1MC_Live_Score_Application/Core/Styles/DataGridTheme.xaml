@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <FontFamily x:Key="Formula1FontStyle">/Core/Fonts/#Formula1 Display</FontFamily>
+    
+    <!--// STANDARD LEADERBOARD //-->
+
+    <Style x:Key="DataGridHeaderTheme" TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="DarkCyan"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="0,0,0,10"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="TextBlock.FontFamily" Value="{StaticResource Formula1FontStyle}"/>
+    </Style>
+
+    <Style x:Key="DataGridCellTheme" TargetType="{x:Type DataGridCell}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Margin" Value="10,10,10,10"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Regular"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="TextBlock.FontFamily" Value="{StaticResource Formula1FontStyle}"/>
+
+    </Style>
+
+    <!--// TEAM COLORS THEME //-->
+
+    <Style x:Key="ColorTheme" TargetType="{x:Type DataGridCell}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontFamily" Value="{StaticResource Formula1FontStyle}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Margin" Value="0,10,10,10"/>
+
+    </Style>
+
+    <!--// FASTEST LAP/SECTOR THEME //-->
+
+    <Style x:Key="FastestTimeColor" TargetType="{x:Type DataGridCell}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Purple"/>
+        <Setter Property="FontFamily" Value="{StaticResource Formula1FontStyle}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Margin" Value="10,10,20,10"/>
+    </Style>
+
+</ResourceDictionary>

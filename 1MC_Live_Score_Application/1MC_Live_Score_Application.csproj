@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>_1MC_Live_Score_Application</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Core\Fonts\Formula1-Black.ttf" />
+    <None Remove="Core\Fonts\Formula1-Bold.ttf" />
+    <None Remove="Core\Fonts\Formula1-Regular.ttf" />
+    <None Remove="Core\Fonts\Formula1-Wide.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Core\Fonts\Formula1-Black.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Fonts\Formula1-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Fonts\Formula1-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Fonts\Formula1-Wide.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>
