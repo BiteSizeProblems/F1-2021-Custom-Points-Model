@@ -52,4 +52,114 @@
 
     </Style>
 
+    <Style TargetType="{x:Type RadioButton}" x:Key="ActionButtonTheme1">
+
+        <Style.Setters>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="RadioButton">
+
+                        <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                Background="{TemplateBinding Background}" BorderThickness="3"
+                                CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}"
+                                Margin="5" Padding="5" x:Name="StatusLight">
+
+                            <TextBlock Text="{TemplateBinding Property=Content}" 
+                                       HorizontalAlignment="Center" 
+                                       Foreground="{TemplateBinding Foreground}"
+                                       FontWeight="Bold"/>
+
+                        </Border>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+            <Setter Property="BorderBrush" Value="White"/>
+
+            <Setter Property="Background" Value="Transparent"/>
+
+            <Setter Property="BorderThickness" Value="1"/>
+
+            <Setter Property="Foreground" Value="White"/>
+
+        </Style.Setters>
+
+        <Style.Triggers>
+
+            <Trigger Property="IsChecked" Value="True">
+
+                <Setter Property="Background" Value="White"/>
+
+                <Setter Property="BorderBrush" Value="White"/>
+
+                <Setter Property="Foreground" Value="Black"/>
+
+            </Trigger>
+
+        </Style.Triggers>
+
+    </Style>
+
+    <Style TargetType="{x:Type RadioButton}" x:Key="ActionButtonTheme2">
+
+        <Style.Setters>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="RadioButton">
+
+                        <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                Background="{TemplateBinding Background}" BorderThickness="3"
+                                CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}"
+                                Margin="5" Padding="5" 
+                                x:Name="StatusLight">
+
+                            <TextBlock Text="{TemplateBinding Property=Content}" 
+                                       HorizontalAlignment="Center" 
+                                       Foreground="{TemplateBinding Foreground}"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"/>
+
+                        </Border>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+            <Setter Property="BorderBrush" Value="DarkCyan"/>
+
+            <Setter Property="Background" Value="Transparent"/>
+
+            <Setter Property="BorderThickness" Value="1"/>
+
+            <Setter Property="Foreground" Value="DarkCyan"/>
+
+        </Style.Setters>
+
+        <Style.Triggers>
+
+            <Trigger Property="IsChecked" Value="True">
+
+                <Setter Property="Background" Value="White"/>
+
+                <Setter Property="BorderBrush" Value="White"/>
+
+                <Setter Property="Foreground" Value="Black"/>
+
+            </Trigger>
+
+        </Style.Triggers>
+
+    </Style>
+
 </ResourceDictionary>

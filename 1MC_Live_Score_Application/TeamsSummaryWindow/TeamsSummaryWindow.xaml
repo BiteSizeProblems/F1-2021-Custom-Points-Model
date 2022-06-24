@@ -49,10 +49,10 @@
                                                 Binding="{Binding FastestLapPoint}"/>
 
                 <DataGridTextColumn Header="OVERTAKES"
-                                                Binding="{Binding HasMostPositionChanges}"/>
+                                                Binding="{Binding MostOvertakesPoint}"/>
 
                 <DataGridTextColumn Header="NO PENALTIES"
-                                                Binding="{Binding HasNoPenalties}"/>
+                                                Binding="{Binding NoPenaltiesPoint}"/>
 
                 <DataGridTextColumn Header="TOTAL"
                                                 Binding="{Binding TotalPoints}"/>

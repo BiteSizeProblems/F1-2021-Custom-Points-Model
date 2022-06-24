@@ -45,13 +45,6 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _team, value, nameof(Team)); }
         }
 
-        private int _teamIndex;
-        public int TeamIndex
-        {
-            get { return _teamIndex; }
-            set { SetField(ref _teamIndex, value, nameof(TeamIndex)); }
-        }
-
         private bool _isActive;
         public bool IsActive
         {
@@ -108,12 +101,28 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _hasNoPenalties, value, nameof(HasNoPenalties)); }
         }
 
-        private int _noPenaltiesPoint;
-        public int NoPenaltiesPoint
+        private int _fastestLapNum;
+        public int FastestLapNum
         {
-            get { return _noPenaltiesPoint; }
-            set { SetField(ref _noPenaltiesPoint, value, nameof(NoPenaltiesPoint)); }
+            get { return _fastestLapNum; }
+            set { SetField(ref _fastestLapNum, value, nameof(FastestLapNum)); }
         }
+
+        private TimeSpan _fastestLapTime;
+        public TimeSpan FastestLapTime
+        {
+            get { return _fastestLapTime; }
+            set { SetField(ref _fastestLapTime, value, nameof(FastestLapTime)); }
+        }
+
+        private int _numLaps;
+        public int NumLaps
+        {
+            get { return _numLaps; }
+            set { SetField(ref _numLaps, value, nameof(NumLaps)); }
+        }
+
+        public TimeSpan[] AllLaptimesArray = new TimeSpan[100];
 
     }
 }

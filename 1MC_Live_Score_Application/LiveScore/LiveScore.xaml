@@ -3,125 +3,170 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:_1MC_Live_Score_Application.Core.Converters" 
+        xmlns:multiviews="clr-namespace:_1MC_Live_Score_Application.MultiViews"
         mc:Ignorable="d"
         Title="LiveScore"
-        Height="250" Width="1000"
-        WindowStartupLocation="CenterScreen">
+        Height="225" Width="950"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        ResizeMode="CanResizeWithGrip"
+        SizeToContent="WidthAndHeight">
 
-    <Grid>
+    <Window.Resources>
+        <converters:StringToColorConverter x:Key="StringToColorConverter"/>
+    </Window.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
-            <RowDefinition Height="50"/>
-        </Grid.RowDefinitions>
+    <Window.Background>
+        <SolidColorBrush Opacity="0.75" Color="Black"/>
+    </Window.Background>
 
-        <Border Grid.Row="1" 
-                Margin="10"
+    <Border Background="Transparent" CornerRadius="5">
+        <Grid Background="Transparent">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="175"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+
+            <Border MouseDown="Border_MouseDown" BorderBrush="Black" BorderThickness="1"
+                HorizontalAlignment="Stretch" 
+                Background="White"
+                CornerRadius="5,5,0,0"
+                    Grid.ColumnSpan="2">
+
+                <Border Margin="1" CornerRadius="10" HorizontalAlignment="Right" 
+                 BorderBrush="White" BorderThickness="1">
+
+                    <DockPanel HorizontalAlignment="Center" Margin="2">
+
+                        <Button Click="MinimizeButton_Click" Width="30" 
+                                    Style="{StaticResource TopbarCloseButtonTheme}">
+                            <TextBlock Text="–" Margin="0,-3,0,0" FontSize="20"/>
+                        </Button>
+
+                        <Button Click="CloseButton_Click" Width="30" 
+                                    Style="{StaticResource TopbarCloseButtonTheme}" HorizontalAlignment="Right">
+                            <TextBlock Text="x" Margin="0,-5,0,0" FontSize="20"/>
+                        </Button>
+
+                    </DockPanel>
+
+                </Border>
+
+            </Border>
+
+            <Border Grid.Row="1" BorderThickness="0,5,0,5" BorderBrush="Purple" Margin="5, 5, 0, 5">
+                
+                <TextBlock Text="LIVE SCORE" TextWrapping="Wrap"
+                           Foreground="Red" FontWeight="Bold"
+                           FontSize="40" TextAlignment="Right"
+                           VerticalAlignment="Center"/>
+                
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="1" 
+                    BorderThickness="0,5,0,5" BorderBrush="Purple" Margin="0,5">
+
+                <Border HorizontalAlignment="Center" Name="AllTeamsBorder"
                 Style="{StaticResource MainWindowBorderTheme}"
-                CornerRadius="15">
+                CornerRadius="15" Background="Transparent">
 
-            <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" MinWidth="125"
+                        Style="{StaticResource LiveScoreTeamBorderTheme}" 
+                        BorderBrush="{Binding Team1.TeamColor, 
+                    Converter={StaticResource StringToColorConverter}, 
+                    FallbackValue='#FF000000'}">
 
-                <Border Grid.Column="0">
+                            <StackPanel>
 
-                    <StackPanel>
+                                <TextBox Grid.Column="0" Foreground="White"
+                       Text="{Binding Team1.Name, FallbackValue=Team1}"
+                       Style="{StaticResource TeamNameTextBoxTheme}"/>
 
-                        <TextBlock Grid.Column="0"
-                       Text="TEAM 1"
-                       TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="20"/>
-
-                        <TextBlock x:Name="TeamAScore"
-                       Grid.Column="1"
+                                <TextBlock x:Name="TeamAScore"
+                       Grid.Column="1" Foreground="White"
                        Text="{Binding Team1.TotalPoints, FallbackValue=0}"
                        TextAlignment="Center" VerticalAlignment="Center"
                            FontSize="30"/>
 
-                    </StackPanel>
+                            </StackPanel>
 
-                </Border>
+                        </Border>
 
-                <TextBlock Text="~" Grid.Column="1" 
+                        <TextBlock Text="~" Grid.Column="1" Foreground="White"
                            TextAlignment="Center" VerticalAlignment="Center"
                            FontSize="36"/>
 
-                <Border Grid.Column="2">
+                        <Border Grid.Column="2" MinWidth="125"
+                        Style="{StaticResource LiveScoreTeamBorderTheme}" 
+                        BorderBrush="{Binding Team2.TeamColor, 
+                    Converter={StaticResource StringToColorConverter}, 
+                    FallbackValue='#FF000000'}">
 
-                    <StackPanel>
+                            <StackPanel>
 
-                        <TextBlock Grid.Column="0"
-                       Text="TEAM 2"
-                       TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="20"/>
+                                <TextBox Grid.Column="0" Foreground="White"
+                       Text="{Binding Team2.Name, FallbackValue=Team2}"
+                       Style="{StaticResource TeamNameTextBoxTheme}"/>
 
-                        <TextBlock Grid.Column="1"
+                                <TextBlock Grid.Column="1" Foreground="White"
                        Text="{Binding Team2.TotalPoints, FallbackValue=0}"
                        TextAlignment="Center" VerticalAlignment="Center"
                            FontSize="30"/>
 
-                    </StackPanel>
+                            </StackPanel>
 
-                </Border>
+                        </Border>
 
-                <TextBlock Text="~" Grid.Column="3" 
+                        <TextBlock Text="~" Grid.Column="3" Name="ThreeTeamSep"
                            TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="36"/>
+                           FontSize="36" Foreground="White"/>
 
-                <Border Grid.Column="4">
+                        <Border Grid.Column="4" Name="ThreeTeamScore" MinWidth="125"
+                        Style="{StaticResource LiveScoreTeamBorderTheme}" 
+                        BorderBrush="{Binding Team3.TeamColor, 
+                    Converter={StaticResource StringToColorConverter}, 
+                    FallbackValue='#FF000000'}">
 
-                    <StackPanel>
+                            <StackPanel>
 
-                        <TextBlock Grid.Column="0"
-                       Text="TEAM 3"
-                       TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="20"/>
+                                <TextBox Grid.Column="0" Foreground="White"
+                                 Text="{Binding Team3.Name, FallbackValue=Team3}"
+                                 Style="{StaticResource TeamNameTextBoxTheme}"/>
 
-                        <TextBlock Grid.Column="1"
+                                <TextBlock Grid.Column="1" Foreground="White"
                        Text="{Binding Team3.TotalPoints, FallbackValue=0}"
                        TextAlignment="Center" VerticalAlignment="Center"
                            FontSize="30"/>
 
-                    </StackPanel>
+                            </StackPanel>
 
-                </Border>
+                        </Border>
 
-                <TextBlock Text="~" Grid.Column="5" 
+                        <TextBlock Text="~" Grid.Column="5" Name="FourTeamSep"
                            TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="36"/>
+                           FontSize="36" Foreground="White"/>
 
-                <Border Grid.Column="6">
-
-                    <StackPanel>
-
-                        <TextBlock Grid.Column="0"
-                       Text="TEAM 4"
-                       TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="20"/>
-
-                        <TextBlock Grid.Column="1"
-                       Text="{Binding Team4.TotalPoints, FallbackValue=0}"
-                       TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="30"/>
+                        
 
                     </StackPanel>
 
+
+
                 </Border>
 
-            </Grid>
+            </Border>
 
-        </Border>
-        
-    </Grid>
-
+        </Grid>
+    </Border>
 </Window>

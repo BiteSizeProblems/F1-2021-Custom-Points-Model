@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_1MC_Live_Score_Application"
-        xmlns:models="clr-namespace:_1MC_Live_Score_Application.Models" 
-        d:DataContext="{d:DesignInstance Type=models:DriverDataModel}"
+        xmlns:models="clr-namespace:_1MC_Live_Score_Application.Models" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="1MC Live Scoring" 
         Height="800" Width="750"
@@ -26,11 +25,24 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="TeamSummaryButton" 
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                
+                <Button x:Name="ExportButton" 
+                    Content="EXPORT"
+                    Style="{StaticResource MenuButtonTheme2}"
+                    Height="45" Width="100"
+                    Click="ExportButtonClicked"/>
+
+                <Button x:Name="TeamSummaryButton" 
                     Content="TEAMS"
                     Style="{StaticResource MenuButtonTheme2}"
                     Height="45" Width="100"
                     Click="TeamsButton_Clicked"/>
+                
+            </StackPanel>
+            
+            
 
             <TextBlock Style="{StaticResource HeaderTheme}" 
                    Text="1MC LIVE SCORING" Grid.Column="1"
@@ -67,14 +79,14 @@
                            Text="SETTINGS"
                            Margin="0" Padding="5"/>
 
-                <Grid>
+                <Grid Height="125" VerticalAlignment="Top">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0">
+                    <StackPanel Grid.Column="0" Height="120" VerticalAlignment="Top">
 
                         <Grid x:Name="TeamsAndScoringModelSelectors"
                               Margin="5">
@@ -95,7 +107,7 @@
                                        Foreground="White"
                                        TextAlignment="Center"
                                        FontWeight="Regular"
-                                       Padding="10"
+                                       Padding="5"
                                        />
 
                             <RadioButton Grid.Row="1" Grid.Column="0" 
@@ -119,9 +131,65 @@
 
                         </Grid>
 
+                        <StackPanel>
+
+                            <TextBlock Text="COLORS" 
+                                       Grid.ColumnSpan="3"
+                                       Foreground="White"
+                                       TextAlignment="Center"
+                                       FontWeight="Regular"
+                                       Padding="5"
+                                       />
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                                <TextBlock Text="1"
+                                       Foreground="White"
+                                       FontSize="16"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"/>
+
+                                <xctk:ColorPicker x:Name="Team1ColorSelector" 
+                                              SelectedColorChanged="Team_ColorChanged"
+                                              Style="{StaticResource TeamColorSelectorTheme}"/>
+
+                                <TextBlock Text="2"
+                                       Foreground="White"
+                                       FontSize="16"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"/>
+
+                                <xctk:ColorPicker x:Name="Team2ColorSelector" 
+                                              SelectedColorChanged="Team_ColorChanged"
+                                              Style="{StaticResource TeamColorSelectorTheme}"/>
+
+                                <TextBlock Text="3"
+                                       Foreground="White"
+                                       FontSize="16"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"/>
+
+                                <xctk:ColorPicker x:Name="Team3ColorSelector" 
+                                              SelectedColorChanged="Team_ColorChanged"
+                                              Style="{StaticResource TeamColorSelectorTheme}"/>
+
+                                <TextBlock Text="4"
+                                       Foreground="White"
+                                       FontSize="16"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"/>
+
+                                <xctk:ColorPicker x:Name="Team4ColorSelector" 
+                                              SelectedColorChanged="Team_ColorChanged"
+                                              Style="{StaticResource TeamColorSelectorTheme}"/>
+
+                            </StackPanel>
+                            
+                        </StackPanel>
+                        
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1">
+                    <StackPanel Grid.Column="1" Height="120" VerticalAlignment="Top">
 
                         <Border BorderThickness="1" BorderBrush="White"
                                 Margin="10" CornerRadius="5">
@@ -145,10 +213,11 @@
 
                 </Grid>
 
-                <Button Content="CONFIRM"
-                        Style="{StaticResource MenuButtonTheme1}"
-                        Width="100" Height="Auto"
-                        Click="ConfirmSettings_Click"/>
+                <RadioButton x:Name="ConfirmSettingsButton" 
+                             Content="CONFIRM SETTINGS"
+                             Style="{StaticResource ActionButtonTheme1}"
+                             Width="175" Height="Auto"
+                             Checked="SettingsConfirmed_Checked"/>
 
             </StackPanel>
 
@@ -156,7 +225,7 @@
 
         <Border Style="{StaticResource MainWindowBorderTheme}"
                 Background="DarkCyan" BorderBrush="DarkCyan"
-                Height="350" CornerRadius="15" x:Name="DriverListBox">
+                Height="400" CornerRadius="15" x:Name="DriverListBox">
 
             <ScrollViewer>
 
@@ -193,6 +262,11 @@
 
                         <DataGrid.Columns>
 
+                            <DataGridTextColumn Header="ID"
+                                                Binding="{Binding ID}"
+                                                IsReadOnly="True" 
+                                                Width="50"/>
+                            
                             <DataGridTextColumn Header="POS"
                                                 Binding="{Binding CurrentPosition}"
                                                 IsReadOnly="True" 
@@ -205,7 +279,7 @@
                             <DataGridTextColumn Header="NAME"
                                                 Binding="{Binding Name}"
                                                 Width="Auto"
-                                                IsReadOnly="True"/>
+                                                IsReadOnly="False"/>
 
                             <DataGridComboBoxColumn Header="TEAM" 
                                                     x:Name="TeamsComboBox" 
@@ -242,17 +316,19 @@
         <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Center">
 
-            <Button Content="START"
-                    x:Name="StartButton"
-                    Style="{StaticResource MenuButtonTheme2}"
-                    Height="45" Width="100" 
-                    Click="StartButton_Clicked"/>
+            <RadioButton x:Name="SimulateScoreButton" 
+                             Content="SIMULATE"
+                             Style="{StaticResource ActionButtonTheme2}"
+                             Width="100" 
+                             Checked="Simulate_Checked" 
+                         GroupName="SimulateGroup"/>
 
-            <Button Content="SIMULATE"
-                    x:Name="SimulateButton"
-                    Style="{StaticResource MenuButtonTheme2}"
-                    Height="45" Width="100"
-                    Click="SimulateButton_Clicked"/>
+            <RadioButton x:Name="ConfirmAndDisplayButton" 
+                             Content="CONFIRM AND DISPLAY"
+                             Style="{StaticResource ActionButtonTheme2}"
+                             Width="200" 
+                             Checked="ConfirmAndDisplay_Checked" 
+                         GroupName="ConfirmGroup"/>
 
         </StackPanel>
 

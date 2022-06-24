@@ -118,7 +118,7 @@ namespace _1MC_Live_Score_Application.Core.Utils
             }
             else
             {
-                return -999;
+                return 0;
             }
         }
     }

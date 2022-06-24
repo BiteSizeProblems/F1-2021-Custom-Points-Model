@@ -16,12 +16,16 @@
                 <ResourceDictionary Source="./Core/Styles/TextBoxInputTheme.xaml"/>
 
                 <!--// NAVIGATION THEMES //-->
+                <ResourceDictionary Source="./Core/Styles/TopBarCloseButtonTheme.xaml"/>
 
                 <!--// CONTENT DISPLAY THEMES //-->
 
                 <ResourceDictionary Source="./Core/Styles/DataGridTheme.xaml"/>
                 <ResourceDictionary Source="./Core/Styles/RadioButtonTheme.xaml"/>
                 <ResourceDictionary Source="./Core/Styles/ButtonTheme.xaml"/>
+                <ResourceDictionary Source="./Core/Styles/TeamNameTextBoxTheme.xaml"/>
+                <ResourceDictionary Source="./Core/Styles/LiveScoreTeamBorderTheme.xaml"/>
+                <ResourceDictionary Source="./Core/Styles/TeamColorSelectorTheme.xaml"/>
 
                 <!--// ALL APP DEFAULTS //-->
                 <ResourceDictionary>

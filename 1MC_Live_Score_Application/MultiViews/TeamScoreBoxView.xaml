@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="_1MC_Live_Score_Application.MultiViews.TeamScoreBoxView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:_1MC_Live_Score_Application.MultiViews" 
+             xmlns:converters="clr-namespace:_1MC_Live_Score_Application.Core.Converters" 
+             xmlns:viewmodels="clr-namespace:_1MC_Live_Score_Application.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200">
+
+    <UserControl.Resources>
+        <converters:StringToColorConverter x:Key="StringToColorConverter"/>
+    </UserControl.Resources>
+    
+    <Border Grid.Column="4" MinWidth="125" Name="BorderView"
+                        Style="{StaticResource LiveScoreTeamBorderTheme}" 
+                        BorderBrush="{Binding Team4.TeamColor, 
+                    Converter={StaticResource StringToColorConverter}, 
+                    FallbackValue='#FF000000'}">
+
+        <StackPanel>
+
+            <TextBox Grid.Column="0" Foreground="White"
+                       Text="{Binding Team4.Name, FallbackValue=Team4}"
+                       Style="{StaticResource TeamNameTextBoxTheme}"/>
+
+            <TextBlock Grid.Column="1" Foreground="White"
+                       Text="{Binding Team4.TotalPoints, FallbackValue=0}"
+                       TextAlignment="Center" VerticalAlignment="Center"
+                           FontSize="30"/>
+
+        </StackPanel>
+
+    </Border>
+    
+    
+
+</UserControl>

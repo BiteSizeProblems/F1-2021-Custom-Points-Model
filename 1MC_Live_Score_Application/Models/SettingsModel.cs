@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace _1MC_Live_Score_Application.Models
 {
@@ -47,6 +48,43 @@ namespace _1MC_Live_Score_Application.Models
         public bool _settingsEntered = false;
 
         public Dictionary<int, int> PointsModel;
+
+        public TimeSpan[] AllFastestLapsArray = new TimeSpan[22];
+
+        private TimeSpan _fastestOverallLapTime = TimeSpan.Zero;
+        public TimeSpan FastestOverallLapTime
+        {
+            get { return _fastestOverallLapTime; }
+            set { SetField(ref _fastestOverallLapTime, value, nameof(FastestOverallLapTime)); }
+        }
+
+        private Color _team1Color;
+        public Color Team1Color
+        {
+            get { return _team1Color; }
+            set { SetField(ref _team1Color, value, nameof(Team1Color)); }
+        }
+
+        private Color _team2Color;
+        public Color Team2Color
+        {
+            get { return _team2Color; }
+            set { SetField(ref _team2Color, value, nameof(Team2Color)); }
+        }
+
+        private Color _team3Color;
+        public Color Team3Color
+        {
+            get { return _team3Color; }
+            set { SetField(ref _team3Color, value, nameof(Team3Color)); }
+        }
+
+        private Color _team4Color;
+        public Color Team4Color
+        {
+            get { return _team4Color; }
+            set { SetField(ref _team4Color, value, nameof(Team4Color)); }
+        }
 
     }
 }

@@ -1,9 +1,5 @@
 ﻿using _1MC_Live_Score_Application.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace _1MC_Live_Score_Application.Models
 {
@@ -12,7 +8,7 @@ namespace _1MC_Live_Score_Application.Models
         // Args CTOR
         public TeamDataModel(int t)
         {
-            this.Team = t;
+            this.ID = t;
         }
 
         // No-Args CTOR
@@ -21,18 +17,25 @@ namespace _1MC_Live_Score_Application.Models
 
         }
 
-        private int _team;
-        public int Team
-        {
-            get { return _team; }
-            set { SetField(ref _team, value, nameof(Team)); }
-        }
-
         private int _id;
         public int ID
         {
             get { return _id; }
             set { SetField(ref _id, value, nameof(ID)); }
+        }
+
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { SetField(ref _name, value, nameof(Name)); }
+        }
+
+        private Color _teamColor;
+        public Color TeamColor
+        {
+            get { return _teamColor; }
+            set { SetField(ref _teamColor, value, nameof(TeamColor)); }
         }
 
         private int _numDrivers;
@@ -63,13 +66,6 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _pointsByPosition, value, nameof(PointsByPosition)); }
         }
 
-        private int _estimatedTeamPoints = 0;
-        public int EstimatedTeamPoints
-        {
-            get { return _estimatedTeamPoints; }
-            set { SetField(ref _estimatedTeamPoints, value, nameof(EstimatedTeamPoints)); }
-        }
-
         private int _positionChanges;
         public int PositionChanges
         {
@@ -91,12 +87,15 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _mostOvertakesPoint, value, nameof(MostOvertakesPoint)); }
         }
 
-        private bool _hasFastestLap;
+        private bool _hasFastestLap = false;
         public bool HasFastestLap
         {
             get { return _hasFastestLap; }
             set { SetField(ref _hasFastestLap, value, nameof(HasFastestLap)); }
         }
+
+        private bool[] _fastestLapsArray;
+        public bool[] FastestLapsArray;
 
         private int _fastestLapPoint;
         public int FastestLapPoint
