@@ -32,9 +32,7 @@ namespace _1MC_Live_Score_Application.LiveScore
                 this.Dispatcher.Invoke(() =>
                 {
                     AllTeamsBorder.Width = 400;
-                    ThreeTeamSep.Visibility = Visibility.Collapsed;
                     ThreeTeamScore.Visibility = Visibility.Collapsed;
-                    FourTeamSep.Visibility = Visibility.Collapsed;
                     //FourTeamScore.Visibility = Visibility.Collapsed;
                 });
             }
@@ -43,9 +41,7 @@ namespace _1MC_Live_Score_Application.LiveScore
                 this.Dispatcher.Invoke(() =>
                 {
                     AllTeamsBorder.Width = 650;
-                    ThreeTeamSep.Visibility = Visibility.Visible;
                     ThreeTeamScore.Visibility = Visibility.Visible;
-                    FourTeamSep.Visibility = Visibility.Collapsed;
                     //FourTeamScore.Visibility = Visibility.Collapsed;
                 });
             }
@@ -53,9 +49,7 @@ namespace _1MC_Live_Score_Application.LiveScore
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    ThreeTeamSep.Visibility = Visibility.Visible;
                     ThreeTeamScore.Visibility = Visibility.Visible;
-                    FourTeamSep.Visibility = Visibility.Visible;
                     //FourTeamScore.Visibility = Visibility.Visible;
                 });
             }

@@ -86,5 +86,12 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _team4Color, value, nameof(Team4Color)); }
         }
 
+        private string _filePath;
+        public string FilePath
+        {
+            get { return _filePath; }
+            set { SetField(ref _filePath, value, nameof(FilePath)); }
+        }
+
     }
 }

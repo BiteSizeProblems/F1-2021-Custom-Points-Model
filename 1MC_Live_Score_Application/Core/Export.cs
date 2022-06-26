@@ -1,11 +1,14 @@
 ﻿using _1MC_Live_Score_Application.Models;
 using _1MC_Live_Score_Application.ViewModels;
+using System;
+using Microsoft.Win32;
 using OfficeOpenXml;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Diagnostics;
 
 namespace _1MC_Live_Score_Application.Core
 {
@@ -28,11 +31,13 @@ namespace _1MC_Live_Score_Application.Core
             var round = settings.Round;
             var series = settings.Series;
 
-            string eventName = series + ": Round: " + round;
+            string folderPath = DataVM.SettingsModel.FilePath;
+            string eventName = series + round;
+            string filePath = $"{folderPath}\\{eventName}.xlsx";
 
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-            var file = new FileInfo(@"C:\Users\alexa\OneDrive\Documents\SlipstreamExport.xlsx");
+            var file = new FileInfo(@$"{filePath}");
 
             await SaveExcelFile(team, driver, file);
         }

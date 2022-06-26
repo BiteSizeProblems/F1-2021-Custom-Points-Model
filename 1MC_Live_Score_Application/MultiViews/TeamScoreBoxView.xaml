@@ -22,11 +22,11 @@
         <StackPanel>
 
             <TextBox Grid.Column="0" Foreground="White"
-                       Text="{Binding Team4.Name, FallbackValue=Team4}"
+                       Text="{Binding Name, FallbackValue=Team}"
                        Style="{StaticResource TeamNameTextBoxTheme}"/>
 
             <TextBlock Grid.Column="1" Foreground="White"
-                       Text="{Binding Team4.TotalPoints, FallbackValue=0}"
+                       Text="{Binding TotalPoints, FallbackValue=0}"
                        TextAlignment="Center" VerticalAlignment="Center"
                            FontSize="30"/>
 

@@ -2,6 +2,7 @@
 using _1MC_Live_Score_Application.Core.Converters;
 using _1MC_Live_Score_Application.Core.Utils;
 using _1MC_Live_Score_Application.ViewModels;
+using _1MC_Live_Score_Application.Views;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -30,8 +31,6 @@ namespace _1MC_Live_Score_Application
             TeamSummaryButton.Visibility = Visibility.Hidden;
             DriverListBox.Visibility = Visibility.Hidden;
 
-            ExportButton.Visibility = Visibility.Hidden;
-
             ConfirmAndDisplayButton.Visibility = Visibility.Hidden;
             SimulateScoreButton.Visibility = Visibility.Hidden;
 
@@ -58,46 +57,75 @@ namespace _1MC_Live_Score_Application
 
         private void SettingsConfirmed_Checked(object sender, RoutedEventArgs e)
         {
-            // Set number of available teams.
-            DataVM.SettingsModel.AvailableTeams = new int[DataVM.SettingsModel.NumTeams];
-
-            for (int i = 0; i < DataVM.SettingsModel.NumTeams; i++)
+            if (DataVM.SettingsModel._settingsEntered == false)
             {
-                DataVM.SettingsModel.AvailableTeams[i] = i + 1;
+                // Set number of available teams.
+                DataVM.SettingsModel.AvailableTeams = new int[DataVM.SettingsModel.NumTeams];
+
+                for (int i = 0; i < DataVM.SettingsModel.NumTeams; i++)
+                {
+                    DataVM.SettingsModel.AvailableTeams[i] = i + 1;
+                }
+
+                DataVM.SettingsModel.PointsModel = PositionToPointsConverter.GetPointsModel(DataVM.SettingsModel.NumTeams);
+
+                DataVM.CreateTeams();
+
+                // Set series and round tags.
+
+                // Set data context for team drop-down menu.
+                TeamsComboBox.ItemsSource = DataVM.SettingsModel.AvailableTeams;
+
+                // Hide driver list until settings have been confirmed.
+                DriverListBox.Visibility = Visibility.Visible;
+
+                ConfirmAndDisplayButton.Visibility = Visibility.Visible;
+                SimulateScoreButton.Visibility = Visibility.Visible;
             }
+            else
+            {
+                // Set number of available teams.
+                DataVM.SettingsModel.AvailableTeams = new int[DataVM.SettingsModel.NumTeams];
 
-            DataVM.SettingsModel.PointsModel = PositionToPointsConverter.GetPointsModel(DataVM.SettingsModel.NumTeams);
+                for (int i = 0; i < DataVM.SettingsModel.NumTeams; i++)
+                {
+                    DataVM.SettingsModel.AvailableTeams[i] = i + 1;
+                }
 
-            DataVM.CreateTeams();
+                DataVM.SettingsModel.PointsModel = PositionToPointsConverter.GetPointsModel(DataVM.SettingsModel.NumTeams);
 
-            // Set series and round tags.
-            DataVM.SettingsModel.Series = SeriesNameTextBox.Text;
-            DataVM.SettingsModel.Round = RoundNumberTextBox.Text;
+                DataVM.CreateTeamColors();
 
-            // Set data context for team drop-down menu.
-            TeamsComboBox.ItemsSource = DataVM.SettingsModel.AvailableTeams;
-
-            // Hide driver list until settings have been confirmed.
-            DriverListBox.Visibility = Visibility.Visible;
-
-            ConfirmAndDisplayButton.Visibility = Visibility.Visible;
-            SimulateScoreButton.Visibility = Visibility.Visible;
+                // Set series and round tags.
+            }
+            
         }
 
         private void ConfirmAndDisplay_Checked(object sender, RoutedEventArgs e)
         {
-            TeamSummaryButton.Visibility = Visibility.Visible; // Display button for team summary
-            ExportButton.Visibility = Visibility.Visible;
-
-            DataVM.GetDriversPerTeam(); // Create teams
-
-            if ( SimulateScoreButton.IsChecked == true)
+            if (DataVM.SettingsModel._settingsEntered == false)
             {
-                DataVM.SimulateTeamPointsNew();
+                TeamSummaryButton.Visibility = Visibility.Visible; // Display button for team summary
+
+                DataVM.GetDriversPerTeam(); // Create teams
+
+                if (SimulateScoreButton.IsChecked == true)
+                {
+                    DataVM.SimulateTeamPointsNew();
+                }
+
+                LiveScore.LiveScore secondWindow = new LiveScore.LiveScore(); // Create new window to display scores.
+                secondWindow.Show();
+
+                DataVM.SettingsModel._settingsEntered = true;
+            }
+            else
+            {
+                LiveScore.LiveScore secondWindow = new LiveScore.LiveScore(); // Create new window to display scores.
+                secondWindow.Show();
             }
 
-            LiveScore.LiveScore secondWindow = new LiveScore.LiveScore(); // Create new window to display scores.
-            secondWindow.Show();
+            
         }
 
         private void Simulate_Checked(object sender, RoutedEventArgs e)
@@ -110,11 +138,6 @@ namespace _1MC_Live_Score_Application
             // Create new window to display Team Summaries.
             TeamsSummaryWindow.TeamsSummaryWindow summaryWindow = new TeamsSummaryWindow.TeamsSummaryWindow();
             summaryWindow.Show();
-        }
-
-        private void ExportButtonClicked(object sender, RoutedEventArgs e)
-        {
-            Export.ModelToExcel();
         }
 
         private void Team_ColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
@@ -138,6 +161,13 @@ namespace _1MC_Live_Score_Application
             {
                 DataVM.SettingsModel.Team4Color = Team4ColorSelector.SelectedColor.Value;
             }
+        }
+
+        private void AdvancedSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Create new window to display Team Summaries.
+            SettingsView settingsView = new SettingsView();
+            settingsView.Show();
         }
     }
 }

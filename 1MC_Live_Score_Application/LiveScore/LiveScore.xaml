@@ -64,12 +64,12 @@
             </Border>
 
             <Border Grid.Row="1" BorderThickness="0,5,0,5" BorderBrush="Purple" Margin="5, 5, 0, 5">
-                
+
                 <TextBlock Text="LIVE SCORE" TextWrapping="Wrap"
                            Foreground="Red" FontWeight="Bold"
                            FontSize="40" TextAlignment="Right"
                            VerticalAlignment="Center"/>
-                
+
             </Border>
 
             <Border Grid.Row="1" Grid.Column="1" 
@@ -103,10 +103,6 @@
 
                         </Border>
 
-                        <TextBlock Text="~" Grid.Column="1" Foreground="White"
-                           TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="36"/>
-
                         <Border Grid.Column="2" MinWidth="125"
                         Style="{StaticResource LiveScoreTeamBorderTheme}" 
                         BorderBrush="{Binding Team2.TeamColor, 
@@ -127,10 +123,6 @@
                             </StackPanel>
 
                         </Border>
-
-                        <TextBlock Text="~" Grid.Column="3" Name="ThreeTeamSep"
-                           TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="36" Foreground="White"/>
 
                         <Border Grid.Column="4" Name="ThreeTeamScore" MinWidth="125"
                         Style="{StaticResource LiveScoreTeamBorderTheme}" 
@@ -153,11 +145,28 @@
 
                         </Border>
 
-                        <TextBlock Text="~" Grid.Column="5" Name="FourTeamSep"
-                           TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="36" Foreground="White"/>
+                        <Border Grid.Column="4" Name="FourTeamScore" MinWidth="125"
+                        Style="{StaticResource LiveScoreTeamBorderTheme}" 
+                        BorderBrush="{Binding Team4.TeamColor, 
+                    Converter={StaticResource StringToColorConverter}, 
+                    FallbackValue='#FF000000'}">
 
-                        
+                            <StackPanel>
+
+                                <TextBox Grid.Column="0" Foreground="White"
+                                 Text="{Binding Team4.Name, FallbackValue=Team4}"
+                                 Style="{StaticResource TeamNameTextBoxTheme}"/>
+
+                                <TextBlock Grid.Column="1" Foreground="White"
+                       Text="{Binding Team4.TotalPoints, FallbackValue=0}"
+                       TextAlignment="Center" VerticalAlignment="Center"
+                           FontSize="30"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+
 
                     </StackPanel>
 
@@ -168,5 +177,7 @@
             </Border>
 
         </Grid>
+        
     </Border>
+    
 </Window>

@@ -93,7 +93,7 @@ namespace _1MC_Live_Score_Application.ViewModels
             }
 
             //UDPC.OnSessionDataReceive += StoreSessionData;
-            //UDPC.OnFinalClassificationDataReceive += StoreFinalClassificationData;
+            UDPC.OnFinalClassificationDataReceive += StoreFinalClassificationData;
             UDPC.OnLapDataReceive += StoreLapData;
             //UDPC.OnLobbyInfoDataReceive += StoreLobbyInfoData;
             //UDPC.OnParticipantsDataReceive += StoreParticipantData;
@@ -124,11 +124,16 @@ namespace _1MC_Live_Score_Application.ViewModels
             Team3 = Team[2];
             Team4 = Team[3];
 
+            CreateTeamColors();
+
+        }
+
+        public void CreateTeamColors()
+        {
             Team1.TeamColor = SettingsModel.Team1Color;
             Team2.TeamColor = SettingsModel.Team2Color;
             Team3.TeamColor = SettingsModel.Team3Color;
             Team4.TeamColor = SettingsModel.Team4Color;
-
         }
 
         public void GetDriversPerTeam()
@@ -181,6 +186,8 @@ namespace _1MC_Live_Score_Application.ViewModels
         private void StoreFinalClassificationData(PacketFinalClassificationData packet)
         {
             latestFinalClassificationDataPacket = packet;
+
+            SettingsModel.IsUDPactive = "Connection: Inactive";
         }
         private void StoreSessionData(PacketSessionData packet)
         {
@@ -191,7 +198,9 @@ namespace _1MC_Live_Score_Application.ViewModels
         {
             PacketLapData lapDataPacket = latestLapDataPacket;
             PacketSessionHistoryData sessionHistoryDataPacket = latestSessionHistoryDataPacket;
+            PacketFinalClassificationData finalClassificationDataPacket = latestFinalClassificationDataPacket;
 
+            // LAP DATA
             if (latestLapDataPacket.lapData != null)
             {
                 for (int i = 0; i < latestLapDataPacket.lapData.Length; i++)
@@ -234,6 +243,7 @@ namespace _1MC_Live_Score_Application.ViewModels
                 }
             }
 
+            // SESSION HISTORY DATA
             if ( latestSessionHistoryDataPacket.m_lapHistoryData != null)
             {
                 var carId = latestSessionHistoryDataPacket.m_carIdx;
@@ -269,6 +279,41 @@ namespace _1MC_Live_Score_Application.ViewModels
                 }
 
                 SettingsModel.FastestOverallLapTime = SettingsModel.AllFastestLapsArray.Where(x => x != TimeSpan.Zero).DefaultIfEmpty().Min();
+            }
+
+            // FINAL CLASSIFICATION DATA
+            if (finalClassificationDataPacket.m_classificationData != null)
+            {
+                for (int i = 0; i < latestFinalClassificationDataPacket.m_classificationData.Length; i++)
+                {
+                    var finalData = latestFinalClassificationDataPacket.m_classificationData[i];
+
+                    Driver[i].CurrentPosition = (byte)finalData.m_position;
+                    Driver[i].NumLaps = (int)finalData.m_numLaps;
+                    Driver[i].FastestLapTime = TimeSpan.FromMilliseconds(finalData.m_bestLapTimeInMS);
+
+                    if (finalData.m_penaltiesTime == 0)
+                    {
+                        Driver[i].HasNoPenalties = true;
+                    }
+                    else
+                    {
+                        Driver[i].HasNoPenalties = false;
+                    }
+
+                    if (finalData.m_resultStatus == Appendeces.ResultStatus.Active || finalData.m_resultStatus == Appendeces.ResultStatus.Finished)
+                    {
+                        Driver[i].IsActive = true;
+
+                        Driver[i].PointsByPosition = PositionToPointsConverter.GetPoints(SettingsModel.PointsModel, Driver[i].CurrentPosition);
+                    }
+                    else
+                    {
+                        Driver[i].IsActive = false;
+
+                        Driver[i].PointsByPosition = 0;
+                    }
+                }
             }
         }
 

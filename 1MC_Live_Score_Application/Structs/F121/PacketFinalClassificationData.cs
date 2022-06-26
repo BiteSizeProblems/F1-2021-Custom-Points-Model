@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using static _1MC_Live_Score_Application.Structs.F121.Appendeces;
 
 namespace _1MC_Live_Score_Application.Structs.F121
 {
@@ -10,7 +11,7 @@ namespace _1MC_Live_Score_Application.Structs.F121
         public byte m_gridPosition;          // Grid position of the car
         public byte m_points;                // Number of points scored
         public byte m_numPitStops;           // Number of pit stops made
-        public byte m_resultStatus;          // Result status - 0 = invalid, 1 = inactive, 2 = active
+        public ResultStatus m_resultStatus;          // Result status - 0 = invalid, 1 = inactive, 2 = active
                                              // 3 = finished, 4 = didnotfinish, 5 = disqualified
                                              // 6 = not classified, 7 = retired
         public uint m_bestLapTimeInMS;       // Best lap time of the session in milliseconds
