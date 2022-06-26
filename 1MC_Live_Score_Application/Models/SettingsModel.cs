@@ -58,28 +58,28 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _fastestOverallLapTime, value, nameof(FastestOverallLapTime)); }
         }
 
-        private Color _team1Color;
+        private Color _team1Color = Color.FromRgb(255,255,255);
         public Color Team1Color
         {
             get { return _team1Color; }
             set { SetField(ref _team1Color, value, nameof(Team1Color)); }
         }
 
-        private Color _team2Color;
+        private Color _team2Color = Color.FromRgb(255, 255, 255);
         public Color Team2Color
         {
             get { return _team2Color; }
             set { SetField(ref _team2Color, value, nameof(Team2Color)); }
         }
 
-        private Color _team3Color;
+        private Color _team3Color = Color.FromRgb(255, 255, 255);
         public Color Team3Color
         {
             get { return _team3Color; }
             set { SetField(ref _team3Color, value, nameof(Team3Color)); }
         }
 
-        private Color _team4Color;
+        private Color _team4Color = Color.FromRgb(255, 255, 255);
         public Color Team4Color
         {
             get { return _team4Color; }

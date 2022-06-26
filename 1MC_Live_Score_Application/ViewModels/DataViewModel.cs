@@ -476,10 +476,12 @@ namespace _1MC_Live_Score_Application.ViewModels
                     if (Team[i].PositionChanges == mostPositionChanges) // if team has most overtakes
                     {
                         Team[i].MostOvertakesPoint = 1;
+                        Team[i].HasMostPositionChanges = true;
                     }
                     else // if team does not
                     {
                         Team[i].MostOvertakesPoint = 0;
+                        Team[i].HasMostPositionChanges = false;
                     }
                 }
             }

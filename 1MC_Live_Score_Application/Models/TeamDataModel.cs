@@ -118,5 +118,12 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _noPenaltiesPoint, value, nameof(NoPenaltiesPoint)); }
         }
 
+        private bool _hasHighestScore;
+        public bool HasHighestScore
+        {
+            get { return _hasHighestScore; }
+            set { SetField(ref _hasHighestScore, value, nameof(HasHighestScore)); }
+        }
+
     }
 }

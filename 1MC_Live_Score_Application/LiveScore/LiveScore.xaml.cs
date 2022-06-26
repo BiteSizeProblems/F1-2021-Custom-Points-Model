@@ -22,6 +22,11 @@ namespace _1MC_Live_Score_Application.LiveScore
 
             this.DataContext = DataVM;
 
+            TeamScoreBox1.DataContext = DataVM.Team1;
+            TeamScoreBox2.DataContext = DataVM.Team2;
+            TeamScoreBox3.DataContext = DataVM.Team3;
+            TeamScoreBox4.DataContext = DataVM.Team4;
+
             slowTimer = new Timer(AdjustTeamsView, null, 0, 10000);
         }
 
@@ -32,8 +37,8 @@ namespace _1MC_Live_Score_Application.LiveScore
                 this.Dispatcher.Invoke(() =>
                 {
                     AllTeamsBorder.Width = 400;
-                    ThreeTeamScore.Visibility = Visibility.Collapsed;
-                    //FourTeamScore.Visibility = Visibility.Collapsed;
+                    TeamScoreBox3.Visibility = Visibility.Collapsed;
+                    TeamScoreBox4.Visibility = Visibility.Collapsed;
                 });
             }
             else if (DataVM.SettingsModel.NumTeams == 3)
@@ -41,16 +46,16 @@ namespace _1MC_Live_Score_Application.LiveScore
                 this.Dispatcher.Invoke(() =>
                 {
                     AllTeamsBorder.Width = 650;
-                    ThreeTeamScore.Visibility = Visibility.Visible;
-                    //FourTeamScore.Visibility = Visibility.Collapsed;
+                    TeamScoreBox3.Visibility = Visibility.Visible;
+                    TeamScoreBox4.Visibility = Visibility.Collapsed;
                 });
             }
             else if (DataVM.SettingsModel.NumTeams == 4)
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    ThreeTeamScore.Visibility = Visibility.Visible;
-                    //FourTeamScore.Visibility = Visibility.Visible;
+                    TeamScoreBox3.Visibility = Visibility.Visible;
+                    TeamScoreBox4.Visibility = Visibility.Visible;
                 });
             }
         }

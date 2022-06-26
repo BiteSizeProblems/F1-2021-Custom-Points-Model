@@ -11,13 +11,17 @@
 
     <UserControl.Resources>
         <converters:StringToColorConverter x:Key="StringToColorConverter"/>
+        <converters:ScoreTypeToLightConverter x:Key="ScoreTypeToLightConverter"/>
+        <converters:FastestLapToLightConverter x:Key="FastestLapToLightConverter"/>
+        <converters:OvertakesToLightConverter x:Key="OvertakesToLightConverter"/>
+        <converters:PenaltiesToLightConverter x:Key="PenaltiesToLightConverter"/>
     </UserControl.Resources>
     
     <Border Grid.Column="4" MinWidth="125" Name="BorderView"
                         Style="{StaticResource LiveScoreTeamBorderTheme}" 
-                        BorderBrush="{Binding Team4.TeamColor, 
+                        BorderBrush="{Binding TeamColor, 
                     Converter={StaticResource StringToColorConverter}, 
-                    FallbackValue='#FF000000'}">
+                    FallbackValue='#FFFFFFFF'}">
 
         <StackPanel>
 
@@ -29,6 +33,29 @@
                        Text="{Binding TotalPoints, FallbackValue=0}"
                        TextAlignment="Center" VerticalAlignment="Center"
                            FontSize="30"/>
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Image Name="TotalScoreLight" Height="25" Margin="5"
+                       Source="{Binding HasHighestScore, Converter={StaticResource ScoreTypeToLightConverter}}"/>
+
+                <Image Name="FastestLapLight" Height="25" Margin="5" Grid.Column="1"
+                       Source="{Binding HasFastestLap, Converter={StaticResource FastestLapToLightConverter}}"/>
+
+                <Image Name="MostOvertakesLight" Height="25" Margin="5" Grid.Column="2"
+                       Source="{Binding HasMostPositionChanges, Converter={StaticResource OvertakesToLightConverter}}"/>
+
+                <Image Name="NoPenaltiesLight" Height="25" Margin="5" Grid.Column="3"
+                       Source="{Binding HasNoPenalties, Converter={StaticResource PenaltiesToLightConverter}}"/>
+
+            </Grid>
 
         </StackPanel>
 

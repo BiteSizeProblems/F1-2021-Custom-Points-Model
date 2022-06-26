@@ -13,6 +13,16 @@
     <None Remove="Core\Fonts\Formula1-Bold.ttf" />
     <None Remove="Core\Fonts\Formula1-Regular.ttf" />
     <None Remove="Core\Fonts\Formula1-Wide.ttf" />
+    <None Remove="Core\Images\check.png" />
+    <None Remove="Core\Images\clean.png" />
+    <None Remove="Core\Images\crown.png" />
+    <None Remove="Core\Images\greenCircle.png" />
+    <None Remove="Core\Images\greyCircle.png" />
+    <None Remove="Core\Images\loading.png" />
+    <None Remove="Core\Images\pinkCircle.png" />
+    <None Remove="Core\Images\specialCircle.png" />
+    <None Remove="Core\Images\stopwatch.png" />
+    <None Remove="Core\Images\upArrow.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +42,36 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Core\Fonts\Formula1-Wide.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\check.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\clean.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\crown.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\greenCircle.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\greyCircle.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\loading.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\pinkCircle.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\specialCircle.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\stopwatch.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\upArrow.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
