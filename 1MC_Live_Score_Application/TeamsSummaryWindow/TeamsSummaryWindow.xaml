@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:_1MC_Live_Score_Application.TeamsSummaryWindow"
         mc:Ignorable="d"
         Title="1MC Teams Summary" 
-        Height="600" Width="950"
+        Height="600" Width="Auto"
         WindowStartupLocation="CenterScreen">
 
     <StackPanel>
@@ -53,31 +53,43 @@
                                     MinWidth="100"/>
 
                 <DataGridTextColumn Header="DRIVERS"
-                                    Binding="{Binding NumDrivers}"
-                                    MinWidth="50"/>
-
-                <DataGridTextColumn Header="ACTIVE"
-                                    Binding="{Binding NumActiveDrivers}"
+                                    Binding="{Binding DriversNumActive}"
                                     MinWidth="50"/>
 
                 <DataGridTextColumn Header="PBP"
                                                 Binding="{Binding PointsByPosition}"
                                     MinWidth="50"/>
 
-                <DataGridTextColumn Header="FASTEST LAP"
+                <DataGridTextColumn Header="HAS F-LAP"
+                                                Binding="{Binding HasFastestLap}"
+                                    MinWidth="50"/>
+                
+                <DataGridTextColumn Header="F-LAP PTS"
                                                 Binding="{Binding FastestLapPoint}"
                                     MinWidth="50"/>
 
-                <DataGridTextColumn Header="OVERTAKES"
+                <DataGridTextColumn Header="NUM OVT"
+                                                Binding="{Binding NumOvertakes}"
+                                    MinWidth="50"/>
+                
+                <DataGridTextColumn Header="OVT PT"
                                                 Binding="{Binding MostOvertakesPoint}"
                                     MinWidth="50"/>
 
-                <DataGridTextColumn Header="NO PENALTIES"
+                <DataGridTextColumn Header="HAS NO PEN"
+                                                Binding="{Binding HasNoPenalties}"
+                                    MinWidth="50"/>
+                
+                <DataGridTextColumn Header="NO PEN PTS"
                                                 Binding="{Binding NoPenaltiesPoint}"
                                     MinWidth="50"/>
 
                 <DataGridTextColumn Header="TOTAL"
                                                 Binding="{Binding TotalPoints}"
+                                    MinWidth="50"/>
+
+                <DataGridTextColumn Header="INVALID"
+                                                Binding="{Binding InvalidScore}"
                                     MinWidth="50"/>
 
             </DataGrid.Columns>

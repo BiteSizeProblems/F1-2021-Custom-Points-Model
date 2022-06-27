@@ -22,10 +22,10 @@ namespace _1MC_Live_Score_Application.LiveScore
 
             this.DataContext = DataVM;
 
-            TeamScoreBox1.DataContext = DataVM.Team1;
-            TeamScoreBox2.DataContext = DataVM.Team2;
-            TeamScoreBox3.DataContext = DataVM.Team3;
-            TeamScoreBox4.DataContext = DataVM.Team4;
+            TeamScoreBox1.DataContext = DataVM.Team[0];
+            TeamScoreBox2.DataContext = DataVM.Team[1];
+            TeamScoreBox3.DataContext = DataVM.Team[2];
+            TeamScoreBox4.DataContext = DataVM.Team[3];
 
             slowTimer = new Timer(AdjustTeamsView, null, 0, 10000);
         }

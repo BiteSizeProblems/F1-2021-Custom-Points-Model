@@ -1,4 +1,5 @@
 ﻿using _1MC_Live_Score_Application.Core;
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 
 namespace _1MC_Live_Score_Application.Models
@@ -15,6 +16,13 @@ namespace _1MC_Live_Score_Application.Models
         public TeamDataModel()
         {
 
+        }
+
+        private ObservableCollection<DriverDataModel> _driver;
+        public ObservableCollection<DriverDataModel> Driver
+        {
+            get { return _driver; }
+            set { SetField(ref _driver, value, nameof(ID)); }
         }
 
         private int _id;
@@ -52,6 +60,13 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _numActiveDrivers, value, nameof(NumActiveDrivers)); }
         }
 
+        private string _driversNumActive;
+        public string DriversNumActive
+        {
+            get { return _driversNumActive; }
+            set { SetField(ref _driversNumActive, value, nameof(DriversNumActive)); }
+        }
+
         private int _totalPoints;
         public int TotalPoints
         {
@@ -73,11 +88,25 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _positionChanges, value, nameof(PositionChanges)); }
         }
 
-        private bool _hasMostPositionChanges;
-        public bool HasMostPositionChanges
+        private int _numOvertakes;
+        public int NumOvertakes
         {
-            get { return _hasMostPositionChanges; }
-            set { SetField(ref _hasMostPositionChanges, value, nameof(HasMostPositionChanges)); }
+            get { return _numOvertakes; }
+            set { SetField(ref _numOvertakes, value, nameof(NumOvertakes)); }
+        }
+
+        private bool _hasMostOvertakes;
+        public bool HasMostOvertakes
+        {
+            get { return _hasMostOvertakes; }
+            set { SetField(ref _hasMostOvertakes, value, nameof(HasMostOvertakes)); }
+        }
+
+        private bool _hasMostUniqueOvertakes;
+        public bool HasMostUniqueOvertakes
+        {
+            get { return _hasMostUniqueOvertakes; }
+            set { SetField(ref _hasMostUniqueOvertakes, value, nameof(HasMostUniqueOvertakes)); }
         }
 
         private int _mostOvertakesPoint;
@@ -111,6 +140,13 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _hasNoPenalties, value, nameof(HasNoPenalties)); }
         }
 
+        private bool _hasPenalty = false;
+        public bool HasPenalty
+        {
+            get { return _hasPenalty; }
+            set { SetField(ref _hasPenalty, value, nameof(HasPenalty)); }
+        }
+
         private int _noPenaltiesPoint;
         public int NoPenaltiesPoint
         {
@@ -123,6 +159,13 @@ namespace _1MC_Live_Score_Application.Models
         {
             get { return _hasHighestScore; }
             set { SetField(ref _hasHighestScore, value, nameof(HasHighestScore)); }
+        }
+
+        private bool _invalidScore;
+        public bool InvalidScore
+        {
+            get { return _invalidScore; }
+            set { SetField(ref _invalidScore, value, nameof(InvalidScore)); }
         }
 
     }

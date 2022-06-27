@@ -109,9 +109,9 @@ namespace _1MC_Live_Score_Application.Core.Utils
 
         }
 
-        public static int GetPoints(Dictionary<int, int> PointsModel, int CurrentPosition)
+        public static int GetPoints(Dictionary<int, int> PointsModel, int CurrentPosition, bool IsActive)
         {
-            if ( PointsModel != null)
+            if ( PointsModel != null && IsActive == true)
             {
                 var Model = PointsModel.ToDictionary(entry => entry.Key, entry => entry.Value);
                 return Model[CurrentPosition];

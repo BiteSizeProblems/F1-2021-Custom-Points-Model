@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Data;
+using static _1MC_Live_Score_Application.Structs.F121.Appendeces;
 
 namespace _1MC_Live_Score_Application.ViewModels
 {
@@ -26,34 +27,6 @@ namespace _1MC_Live_Score_Application.ViewModels
 
         public DriverDataModel? _driver { get; set; }
 
-        private TeamDataModel _team1;
-        public TeamDataModel Team1
-        {
-            get { return _team1; }
-            set { SetField(ref _team1, value, nameof(Team1)); }
-        }
-
-        private TeamDataModel _team2;
-        public TeamDataModel Team2
-        {
-            get { return _team2; }
-            set { SetField(ref _team2, value, nameof(Team2)); }
-        }
-
-        private TeamDataModel _team3;
-        public TeamDataModel Team3
-        {
-            get { return _team3; }
-            set { SetField(ref _team3, value, nameof(Team3)); }
-        }
-
-        private TeamDataModel _team4;
-        public TeamDataModel Team4
-        {
-            get { return _team4; }
-            set { SetField(ref _team4, value, nameof(Team4)); }
-        }
-
         public SettingsModel SettingsModel { get; set; }
         public ObservableCollection<DriverDataModel> Driver { get; set; }
         public ObservableCollection<TeamDataModel> Team { get; set; }
@@ -62,6 +35,7 @@ namespace _1MC_Live_Score_Application.ViewModels
         private readonly object _teamLock = new object();
 
         private Timer fastTimer;
+        private Timer fastTimer2;
         private Timer slowTimer;
         private Timer mediumTimer;
 
@@ -78,8 +52,6 @@ namespace _1MC_Live_Score_Application.ViewModels
             Team = new ObservableCollection<TeamDataModel>();
             SettingsModel = new SettingsModel();
 
-            SettingsModel.IsUDPactive = "Connection: Waiting";
-
             BindingOperations.EnableCollectionSynchronization(Driver, _driverLock);
             BindingOperations.EnableCollectionSynchronization(Driver, _teamLock);
 
@@ -89,51 +61,50 @@ namespace _1MC_Live_Score_Application.ViewModels
 
                 Driver[i].ID = i + 1;
                 Driver[i].Name = "...";
-                Driver[i].Team = 1;
+                Driver[i].Team = 0;
+                Driver[i].CurrentPosition = i + 1;
             }
 
-            //UDPC.OnSessionDataReceive += StoreSessionData;
-            UDPC.OnFinalClassificationDataReceive += StoreFinalClassificationData;
-            UDPC.OnLapDataReceive += StoreLapData;
-            //UDPC.OnLobbyInfoDataReceive += StoreLobbyInfoData;
-            //UDPC.OnParticipantsDataReceive += StoreParticipantData;
-            UDPC.OnSessionHistoryDataReceive += StoreSessionHistoryData;
-
-            fastTimer = new Timer(GetDriverData, null, 0, 1000);
-            mediumTimer = new Timer(CallDriversPerTeam, null, 0, 5000);
-            slowTimer = new Timer(CalculateTeamPoints, null, 0, 3000);
-
-        }
-
-        private void CallDriversPerTeam(object? state)
-        {
-            GetDriversPerTeam();
-        }
-
-        public void CreateTeams()
-        {
             for (int i = 0; i < 4; i++)
             {
                 Team.Add(new TeamDataModel());
                 Team[i].ID = i + 1;
-                Team[i].Name = $"Team {i+1}";
+                Team[i].Name = $"Team {i + 1}";
             }
 
-            Team1 = Team[0];
-            Team2 = Team[1];
-            Team3 = Team[2];
-            Team4 = Team[3];
+            UDPC.OnLapDataReceive += UDPC_OnLapDataReceive;
+            UDPC.OnSessionHistoryDataReceive += UDPC_OnSessionHistoryDataReceive;
+            UDPC.OnFinalClassificationDataReceive += UDPC_OnFinalClassificationDataReceive;
 
-            CreateTeamColors();
+            UDPC.OnFinalClassificationDataReceive += StoreFinalClassificationData;
+            UDPC.OnLapDataReceive += StoreLapData;
+            UDPC.OnLobbyInfoDataReceive += StoreLobbyInfoData;
+            UDPC.OnSessionHistoryDataReceive += StoreSessionHistoryData;
+            //UDPC.OnSessionDataReceive += StoreSessionData;
+            //UDPC.OnParticipantsDataReceive += StoreParticipantData;
+
+            fastTimer2 = new Timer(AssignTeamValues, null, 0, 1000);
+            fastTimer = new Timer(GetDriverData, null, 0, 1000);
+            mediumTimer = new Timer(CallDriversPerTeam, null, 0, 1000);
+            slowTimer = new Timer(CalculateTeamPoints, null, 0, 3000);
 
         }
 
+        // ASSIGN TEAM COLORS
+
         public void CreateTeamColors()
         {
-            Team1.TeamColor = SettingsModel.Team1Color;
-            Team2.TeamColor = SettingsModel.Team2Color;
-            Team3.TeamColor = SettingsModel.Team3Color;
-            Team4.TeamColor = SettingsModel.Team4Color;
+            Team[0].TeamColor = SettingsModel.Team1Color;
+            Team[1].TeamColor = SettingsModel.Team2Color;
+            Team[2].TeamColor = SettingsModel.Team3Color;
+            Team[3].TeamColor = SettingsModel.Team4Color;
+        }
+
+        // GET DRIVERS PER TEAM
+
+        private void CallDriversPerTeam(object? state)
+        {
+            GetDriversPerTeam();
         }
 
         public void GetDriversPerTeam()
@@ -162,6 +133,64 @@ namespace _1MC_Live_Score_Application.ViewModels
                 Team[i].NumDrivers = numDrivers;
                 Team[i].NumActiveDrivers = numActiveDrivers;
 
+                Team[i].DriversNumActive = $"{numActiveDrivers} / {numDrivers}";
+
+            }
+        }
+
+        // LAP DATA PACKET
+
+        private void UDPC_OnLapDataReceive(PacketLapData packet)
+        {
+            SettingsModel.IsConnectionActive = true;
+
+            for (int i = 0; i < 22; i++)
+            {
+                var lapData = packet.lapData[i];
+
+                Driver[i].CurrentPosition = lapData.carPosition;
+                Driver[i].GridPosition = lapData.gridPosition;
+                Driver[i].ResultStatus = lapData.resultStatus;
+                Driver[i].Penalties = TimeSpan.FromSeconds(lapData.penalties);
+            }
+        }
+
+        // SESSION HISTORY DATA PACKET
+        private void UDPC_OnSessionHistoryDataReceive(PacketSessionHistoryData packet)
+        {
+            var carId = packet.m_carIdx;
+            var driverData = Driver[carId];
+
+            driverData.FastestLapNum = packet.m_bestLapTimeLapNum;
+            driverData.NumLaps = packet.m_numLaps;
+
+            for (int i = 0; i < packet.m_lapHistoryData.Length; i++)
+            {
+                var sessionHistoryData = packet.m_lapHistoryData[i];
+
+                var lapRef = i + 1;
+
+                if (lapRef == packet.m_bestLapTimeLapNum)
+                {
+                    Driver[carId].FastestLapTime = TimeSpan.FromMilliseconds(sessionHistoryData.m_lapTimeInMS);
+                }
+            }
+        }
+
+        // FINAL CLASSIFICATION DATA PACKET
+        private void UDPC_OnFinalClassificationDataReceive(PacketFinalClassificationData packet)
+        {
+            SettingsModel.IsConnectionActive = false;
+
+            for (int i = 0; i < latestFinalClassificationDataPacket.m_classificationData.Length; i++)
+            {
+                var finalData = latestFinalClassificationDataPacket.m_classificationData[i];
+
+                Driver[i].CurrentPosition = finalData.m_position;
+                Driver[i].GridPosition = finalData.m_gridPosition;
+                Driver[i].NumLaps = finalData.m_numLaps;
+                Driver[i].FastestLapTime = TimeSpan.FromMilliseconds(finalData.m_bestLapTimeInMS);
+                Driver[i].Penalties = TimeSpan.FromSeconds(finalData.m_penaltiesTime);
             }
         }
 
@@ -180,14 +209,10 @@ namespace _1MC_Live_Score_Application.ViewModels
         private void StoreLapData(PacketLapData packet)
         {
             latestLapDataPacket = packet;
-
-            SettingsModel.IsUDPactive = "Connection: Active";
         }
         private void StoreFinalClassificationData(PacketFinalClassificationData packet)
         {
             latestFinalClassificationDataPacket = packet;
-
-            SettingsModel.IsUDPactive = "Connection: Inactive";
         }
         private void StoreSessionData(PacketSessionData packet)
         {
@@ -199,20 +224,20 @@ namespace _1MC_Live_Score_Application.ViewModels
             PacketLapData lapDataPacket = latestLapDataPacket;
             PacketSessionHistoryData sessionHistoryDataPacket = latestSessionHistoryDataPacket;
             PacketFinalClassificationData finalClassificationDataPacket = latestFinalClassificationDataPacket;
+            PacketLobbyInfoData lobbyInfoDataPacket = latestLobbyInfoDataPacket;
 
             // LAP DATA
-            if (latestLapDataPacket.lapData != null)
+            for (int i = 0; i < 22; i++)
             {
-                for (int i = 0; i < latestLapDataPacket.lapData.Length; i++)
+                // REMOVE INVALID DRIVERS
+                if (Driver[i].CurrentPosition == 0)
                 {
-                    var lapData = lapDataPacket.lapData[i];
-
-                    if (lapData.carPosition == 0)
-                    {
-                        Driver[i].Team = 0;
-                    }
-
-                    if (lapData.resultStatus == Appendeces.ResultStatus.Active || lapData.resultStatus == Appendeces.ResultStatus.Finished)
+                    Driver[i].Team = 0;
+                }
+                else
+                {
+                    // IS DRIVER ACTIVE?
+                    if (Driver[i].ResultStatus == ResultStatus.Active || Driver[i].ResultStatus == ResultStatus.Finished)
                     {
                         Driver[i].IsActive = true;
                     }
@@ -221,53 +246,12 @@ namespace _1MC_Live_Score_Application.ViewModels
                         Driver[i].IsActive = false;
                     }
 
-                    if (lapData.penalties != 0)
-                    {
-                        Driver[i].HasNoPenalties = false;
-                    }
-                    else
-                    {
-                        Driver[i].HasNoPenalties = true;
-                    }
+                    // SET DRIVER PBP
+                    Driver[i].PointsByPosition = PositionToPointsConverter.GetPoints(SettingsModel.PointsModel, Driver[i].CurrentPosition, Driver[i].IsActive);
 
-                    Driver[i].ResultStatus = lapData.resultStatus;
-
-                    Driver[i].CurrentPosition = lapData.carPosition;
-                    Driver[i].GridPosition = lapData.gridPosition;
-                    Driver[i].PositionChanges = lapData.carPosition - lapData.gridPosition;
-
-                    if (Driver[i].IsActive == true)
-                    {
-                        Driver[i].PointsByPosition = PositionToPointsConverter.GetPoints(SettingsModel.PointsModel, Driver[i].CurrentPosition);
-                    }
-                }
-            }
-
-            // SESSION HISTORY DATA
-            if ( latestSessionHistoryDataPacket.m_lapHistoryData != null)
-            {
-                var carId = latestSessionHistoryDataPacket.m_carIdx;
-                var driverData = Driver[carId];
-
-                driverData.FastestLapNum = latestSessionHistoryDataPacket.m_bestLapTimeLapNum;
-                driverData.NumLaps = latestSessionHistoryDataPacket.m_numLaps;
-
-                for (int i = 0; i < latestSessionHistoryDataPacket.m_lapHistoryData.Length; i++)
-                {
-                    var sessionHistoryData = latestSessionHistoryDataPacket.m_lapHistoryData[i];
-
-                    var lapRef = i + 1;
-
-                    if ( lapRef == sessionHistoryDataPacket.m_bestLapTimeLapNum)
-                    {
-                        Driver[carId].FastestLapTime = TimeSpan.FromMilliseconds(sessionHistoryData.m_lapTimeInMS);
-                    }
-                }
-
-                for (int i = 0; i < 22; i++)
-                {
                     SettingsModel.AllFastestLapsArray[i] = Driver[i].FastestLapTime;
 
+                    // DOES DRIVER HAVE FASTEST LAP?
                     if (Driver[i].FastestLapTime == SettingsModel.FastestOverallLapTime)
                     {
                         Driver[i].HasFastestLap = true;
@@ -276,23 +260,10 @@ namespace _1MC_Live_Score_Application.ViewModels
                     {
                         Driver[i].HasFastestLap = false;
                     }
-                }
 
-                SettingsModel.FastestOverallLapTime = SettingsModel.AllFastestLapsArray.Where(x => x != TimeSpan.Zero).DefaultIfEmpty().Min();
-            }
+                    SettingsModel.FastestOverallLapTime = SettingsModel.AllFastestLapsArray.Where(x => x != TimeSpan.Zero).DefaultIfEmpty().Min();
 
-            // FINAL CLASSIFICATION DATA
-            if (finalClassificationDataPacket.m_classificationData != null)
-            {
-                for (int i = 0; i < latestFinalClassificationDataPacket.m_classificationData.Length; i++)
-                {
-                    var finalData = latestFinalClassificationDataPacket.m_classificationData[i];
-
-                    Driver[i].CurrentPosition = (byte)finalData.m_position;
-                    Driver[i].NumLaps = (int)finalData.m_numLaps;
-                    Driver[i].FastestLapTime = TimeSpan.FromMilliseconds(finalData.m_bestLapTimeInMS);
-
-                    if (finalData.m_penaltiesTime == 0)
+                    if (Driver[i].Penalties == TimeSpan.Zero)
                     {
                         Driver[i].HasNoPenalties = true;
                     }
@@ -301,28 +272,84 @@ namespace _1MC_Live_Score_Application.ViewModels
                         Driver[i].HasNoPenalties = false;
                     }
 
-                    if (finalData.m_resultStatus == Appendeces.ResultStatus.Active || finalData.m_resultStatus == Appendeces.ResultStatus.Finished)
+                    if (Driver[i].GridPosition < Driver[i].CurrentPosition)
                     {
-                        Driver[i].IsActive = true;
-
-                        Driver[i].PointsByPosition = PositionToPointsConverter.GetPoints(SettingsModel.PointsModel, Driver[i].CurrentPosition);
+                        Driver[i].NumOvertakes = 0;
                     }
                     else
                     {
-                        Driver[i].IsActive = false;
-
-                        Driver[i].PointsByPosition = 0;
+                        Driver[i].NumOvertakes = (Driver[i].GridPosition - Driver[i].CurrentPosition);
                     }
                 }
             }
+        }
+
+        private void AssignTeamValues(object? state)
+        {
+            var overtakesArray = SettingsModel.TeamPositionChangeTotals;
+
+            for (int i = 0; i < Team.Count; i++)
+            {
+                var thisTeam = i + 1;
+                int pbp = 0;
+                var overtakes = 0;
+
+                for (int j = 0; j < 22; j++)
+                {
+                    var driversTeam = Driver[j].Team;
+                    var driversPointsByPosition = Driver[j].PointsByPosition;
+
+                    if (thisTeam == driversTeam)
+                    {
+                        if (Driver[j].IsActive == true) // Points By Position
+                        {
+                            pbp += driversPointsByPosition;
+                        }
+
+                        if (Driver[j].HasPenalty == true) // Has Penalty
+                        {
+                            Team[i].HasPenalty = true;
+                        }
+
+                        if (Driver[j].HasFastestLap == true) // Has Fastest Lap
+                        {
+                            Team[i].HasFastestLap = true;
+                            SettingsModel.TeamWithFastestLap = i + 1;
+                        }
+
+                        overtakes += Driver[j].NumOvertakes;
+                    }
+                }
+
+                Team[i].PointsByPosition = pbp;
+
+                if (Team[i].ID != SettingsModel.TeamWithFastestLap)
+                {
+                    Team[i].HasFastestLap = false;
+                }
+
+                SettingsModel.OvertakesArray[i] = Team[i].NumOvertakes;
+                overtakesArray[i] = overtakes;
+                Team[i].NumOvertakes = overtakes;
+
+                if (Team[i].NumOvertakes == overtakesArray.Max())
+                {
+                    Team[i].HasMostOvertakes = true;
+                }
+                else
+                {
+                    Team[i].HasMostOvertakes = false;
+                }
+
+            }
+
+            SettingsModel.MostOvertakes = overtakesArray.Max();
         }
 
         private void CalculateTeamPoints(object state = null)
         {
             if (SettingsModel.PointsModel != null && Team.Count > 1)
             {
-                CalculateTeamPointsByPosition();
-
                 CalculateTeamPointsByPositionChange();
 
                 CalculateTeamPointsByFastestLap();
@@ -333,55 +360,11 @@ namespace _1MC_Live_Score_Application.ViewModels
             }
         }
 
-        private void CalculateTeamPointsByPosition()
-        {
-            for ( int i = 0; i < Team.Count; i++)
-            {
-                var thisTeam = i + 1;
-                int pbp = 0;
-
-                for (int j = 0; j < 22; j++)
-                {
-                    var driversTeam = Driver[j].Team;
-                    var driversPointsByPosition = Driver[j].PointsByPosition;
-
-                    if (thisTeam == driversTeam && Driver[i].IsActive == true)
-                    {
-                        pbp += driversPointsByPosition;
-                    }
-                }
-
-                Team[i].PointsByPosition = pbp;
-
-            }
-        }
-
-        private void CalculateTotalTeamPoints()
-        {
-            for (int i = 0; i < SettingsModel.NumTeams; i++)
-            {
-                Team[i].TotalPoints = Team[i].PointsByPosition + Team[i].FastestLapPoint + Team[i].NoPenaltiesPoint + Team[i].MostOvertakesPoint;
-            }
-        }
-
         private void CalculateTeamPointsByPenalties()
         {
             for (int i = 0; i < Team.Count; i++)
             {
-                var thisTeam = i + 1;
-
-                for (int j = 0; j < 22; j++)
-                {
-                    if (Driver[j].Team == thisTeam)
-                    {
-                        if (Driver[j].HasNoPenalties == false)
-                        {
-                            Team[i].HasNoPenalties = false;
-                        }
-                    }
-                }
-
-                if (Team[i].HasNoPenalties == true)
+                if (Team[i].HasPenalty == true)
                 {
                     Team[i].NoPenaltiesPoint = Team[i].NumActiveDrivers;
                 }
@@ -396,28 +379,6 @@ namespace _1MC_Live_Score_Application.ViewModels
         {
             for ( int i = 0; i < Team.Count; i++)
             {
-                var thisTeam = i + 1;
-
-                for ( int j = 0; j < 22; j++)
-                {
-                    if (Driver[j].Team == thisTeam)
-                    {
-                        if (Driver[j].HasFastestLap == true)
-                        {
-                            for ( int k = 0; k < Team.Count; k++)
-                            {
-                                Team[k].HasFastestLap = false;
-                            }
-
-                            Team[i].HasFastestLap = true;
-                        }
-                        else if (Driver[j].HasFastestLap == false && Driver[j].Team != thisTeam)
-                        {
-                            Team[i].HasFastestLap = false;
-                        }
-                    }
-                }
-
                 if (Team[i].HasFastestLap == true)
                 {
                     Team[i].FastestLapPoint = Team[i].NumActiveDrivers;
@@ -431,65 +392,70 @@ namespace _1MC_Live_Score_Application.ViewModels
 
         private void CalculateTeamPointsByPositionChange()
         {
-            var overtakesArray = SettingsModel.TeamPositionChangeTotals;
-
-            for ( int i = 0; i < Team.Count; i++ )
-            {
-                var thisTeam = i + 1;
-                var overtakes = 0;
-
-                for ( int j = 0; j < 22; j++)
-                {
-                    if (Driver[j].Team == thisTeam)
-                    {
-                        overtakes += Driver[j].PositionChanges;
-                    }
-                }
-
-                overtakesArray[i] = overtakes;
-
-                Team[i].PositionChanges = overtakes;
-
-            }
-
-            var mostPositionChanges = overtakesArray.Min();
-
             bool overtakesDuplicates = false;
 
+            var overtakesArray = SettingsModel.OvertakesArray;
+
             Array.Sort(overtakesArray);
-            foreach (int i in overtakesArray)
+
+            if (overtakesArray[3] == overtakesArray[2] || overtakesArray[3] == overtakesArray[1])
             {
-                if (overtakesArray[0] == overtakesArray[1] || overtakesArray[0] == overtakesArray[2])
-                {
-                    overtakesDuplicates = true;
-                }
-                else
-                {
-                    overtakesDuplicates = false;
-                }
+                overtakesDuplicates = true;
+            }
+            else
+            {
+                overtakesDuplicates = false;
             }
 
-            if (overtakesDuplicates == false) // if there are no duplicates
+            foreach (int i in overtakesArray)
             {
-                for (int i = 0; i < Team.Count; i++)
+                Debug.WriteLine(" 0 " + overtakesArray[0]);
+                Debug.WriteLine(" 1 " + overtakesArray[1]);
+                Debug.WriteLine(" 2 " + overtakesArray[2]);
+                Debug.WriteLine(" 3 " + overtakesArray[3]);
+
+                
+            }
+
+            for (int i = 0; i < Team.Count; i++)
+            {
+                Team[i].MostOvertakesPoint = MostOvertakesPointCalculator.GetOvertakesPoint(Team[i].HasMostOvertakes, overtakesDuplicates);
+            }
+
+        }
+
+        private void CalculateTotalTeamPoints()
+        {
+            var totalScore = 0;
+
+            for (int i = 0; i < Team.Count; i++)
+            {
+                Team[i].TotalPoints = Team[i].PointsByPosition + Team[i].FastestLapPoint + Team[i].NoPenaltiesPoint + Team[i].MostOvertakesPoint;
+
+                totalScore += Team[i].TotalPoints;
+
+                // DATA QUALITY TESTS
+                if (SettingsModel.NumTeams == 2 || SettingsModel.NumTeams == 4)
                 {
-                    if (Team[i].PositionChanges == mostPositionChanges) // if team has most overtakes
+                    if (Team[i].TotalPoints > 87)
                     {
-                        Team[i].MostOvertakesPoint = 1;
-                        Team[i].HasMostPositionChanges = true;
+                        Team[i].InvalidScore = true;
                     }
-                    else // if team does not
+                    else
                     {
-                        Team[i].MostOvertakesPoint = 0;
-                        Team[i].HasMostPositionChanges = false;
+                        Team[i].InvalidScore = false;
                     }
                 }
-            }
-            else // if there are duplicates
-            {
-                for (int i = 0; i < Team.Count; i++)
+                else if (SettingsModel.NumTeams == 3)
                 {
-                    Team[i].MostOvertakesPoint = 0;
+                    if (Team[i].TotalPoints > 121)
+                    {
+                        Team[i].InvalidScore = true;
+                    }
+                    else
+                    {
+                        Team[i].InvalidScore = false;
+                    }
                 }
             }
         }
@@ -514,15 +480,13 @@ namespace _1MC_Live_Score_Application.ViewModels
 
                 if (Driver[i].IsActive == true)
                 {
-                    Driver[i].PointsByPosition = PositionToPointsConverter.GetPoints(SettingsModel.PointsModel, Driver[i].CurrentPosition);
+                    Driver[i].PointsByPosition = PositionToPointsConverter.GetPoints(SettingsModel.PointsModel, Driver[i].CurrentPosition, Driver[i].IsActive);
                 }
             }
         }
 
         public void SimulateTeamPointsNew()
         {
-            CalculateTeamPointsByPosition();
-
             CalculateTeamPointsByFastestLap();
 
             CalculateTeamPointsByPenalties();

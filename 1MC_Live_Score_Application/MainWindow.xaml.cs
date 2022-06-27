@@ -30,7 +30,6 @@ namespace _1MC_Live_Score_Application
 
             TeamSummaryButton.Visibility = Visibility.Hidden;
             DriverListBox.Visibility = Visibility.Hidden;
-
             ConfirmAndDisplayButton.Visibility = Visibility.Hidden;
             SimulateScoreButton.Visibility = Visibility.Hidden;
 
@@ -57,35 +56,9 @@ namespace _1MC_Live_Score_Application
 
         private void SettingsConfirmed_Checked(object sender, RoutedEventArgs e)
         {
-            if (DataVM.SettingsModel._settingsEntered == false)
+            if (DataVM.SettingsModel._settingsEntered == false) // IF SETTINGS HAVE NOT ALREADY BEEN ENTERED.
             {
-                // Set number of available teams.
-                DataVM.SettingsModel.AvailableTeams = new int[DataVM.SettingsModel.NumTeams];
-
-                for (int i = 0; i < DataVM.SettingsModel.NumTeams; i++)
-                {
-                    DataVM.SettingsModel.AvailableTeams[i] = i + 1;
-                }
-
-                DataVM.SettingsModel.PointsModel = PositionToPointsConverter.GetPointsModel(DataVM.SettingsModel.NumTeams);
-
-                DataVM.CreateTeams();
-
-                // Set series and round tags.
-
-                // Set data context for team drop-down menu.
-                TeamsComboBox.ItemsSource = DataVM.SettingsModel.AvailableTeams;
-
-                // Hide driver list until settings have been confirmed.
-                DriverListBox.Visibility = Visibility.Visible;
-
-                ConfirmAndDisplayButton.Visibility = Visibility.Visible;
-                SimulateScoreButton.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                // Set number of available teams.
-                DataVM.SettingsModel.AvailableTeams = new int[DataVM.SettingsModel.NumTeams];
+                DataVM.SettingsModel.AvailableTeams = new int[DataVM.SettingsModel.NumTeams]; // Set number of available teams.
 
                 for (int i = 0; i < DataVM.SettingsModel.NumTeams; i++)
                 {
@@ -96,9 +69,31 @@ namespace _1MC_Live_Score_Application
 
                 DataVM.CreateTeamColors();
 
-                // Set series and round tags.
+                TeamsComboBox.ItemsSource = DataVM.SettingsModel.AvailableTeams; // Set data context for team drop-down menu.
+
+                DriverListBox.Visibility = Visibility.Visible; // Hide driver list until settings have been confirmed.
+                ConfirmAndDisplayButton.Visibility = Visibility.Visible;
+                SimulateScoreButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                DataVM.SettingsModel.AvailableTeams = new int[DataVM.SettingsModel.NumTeams]; // Set number of available teams.
+
+                for (int i = 0; i < DataVM.SettingsModel.NumTeams; i++)
+                {
+                    DataVM.SettingsModel.AvailableTeams[i] = i + 1;
+                }
+
+                DataVM.SettingsModel.PointsModel = PositionToPointsConverter.GetPointsModel(DataVM.SettingsModel.NumTeams);
+
+                DataVM.CreateTeamColors();
             }
             
+        }
+
+        private void Simulate_Checked(object sender, RoutedEventArgs e)
+        {
+            DataVM.SimulateDrivers();
         }
 
         private void ConfirmAndDisplay_Checked(object sender, RoutedEventArgs e)
@@ -126,11 +121,6 @@ namespace _1MC_Live_Score_Application
             }
 
             
-        }
-
-        private void Simulate_Checked(object sender, RoutedEventArgs e)
-        {
-            DataVM.SimulateDrivers();
         }
 
         private void TeamsButton_Clicked(object sender, RoutedEventArgs e)

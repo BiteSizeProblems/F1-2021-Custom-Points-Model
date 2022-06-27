@@ -13,9 +13,10 @@ namespace _1MC_Live_Score_Application.Models
     public class DriverDataModel : ObservableObject
     {
         // Args CTOR
-        public DriverDataModel(int i)
+        public DriverDataModel(int i, int t)
         {
             this.ID = i;
+            this.Team = t;
         }
 
         // No-Args CTOR
@@ -45,7 +46,7 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _team, value, nameof(Team)); }
         }
 
-        private bool _isActive;
+        private bool _isActive = true;
         public bool IsActive
         {
             get { return _isActive; }
@@ -73,6 +74,13 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _positionChanges, value, nameof(PositionChanges)); }
         }
 
+        private int _numOvertakes;
+        public int NumOvertakes
+        {
+            get { return _positionChanges; }
+            set { SetField(ref _positionChanges, value, nameof(PositionChanges)); }
+        }
+
         private int _pointsByPosition;
         public int PointsByPosition
         {
@@ -80,25 +88,25 @@ namespace _1MC_Live_Score_Application.Models
             set { SetField(ref _pointsByPosition, value, nameof(PointsByPosition)); }
         }
 
-        private ResultStatus _resultStatus;
-        public ResultStatus ResultStatus
-        {
-            get { return _resultStatus; }
-            set { SetField(ref _resultStatus, value, nameof(ResultStatus)); }
-        }
-
-        private bool _hasFastestLap;
+        private bool _hasFastestLap = false;
         public bool HasFastestLap
         {
             get { return _hasFastestLap; }
             set { SetField(ref _hasFastestLap, value, nameof(HasFastestLap)); }
         }
 
-        private bool _hasNoPenalties;
+        private bool _hasNoPenalties = true;
         public bool HasNoPenalties
         {
             get { return _hasNoPenalties; }
             set { SetField(ref _hasNoPenalties, value, nameof(HasNoPenalties)); }
+        }
+
+        private bool _hasPenalty = false;
+        public bool HasPenalty
+        {
+            get { return _hasPenalty; }
+            set { SetField(ref _hasPenalty, value, nameof(HasPenalty)); }
         }
 
         private int _fastestLapNum;
@@ -123,6 +131,20 @@ namespace _1MC_Live_Score_Application.Models
         }
 
         public TimeSpan[] AllLaptimesArray = new TimeSpan[100];
+
+        private ResultStatus _resultStatus;
+        public ResultStatus ResultStatus
+        {
+            get { return _resultStatus; }
+            set { SetField(ref _resultStatus, value, nameof(ResultStatus)); }
+        }
+
+        private TimeSpan _penalties;
+        public TimeSpan Penalties
+        {
+            get { return _penalties; }
+            set { SetField(ref _penalties, value, nameof(Penalties)); }
+        }
 
     }
 }

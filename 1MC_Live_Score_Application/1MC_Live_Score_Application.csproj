@@ -17,12 +17,15 @@
     <None Remove="Core\Images\clean.png" />
     <None Remove="Core\Images\crown.png" />
     <None Remove="Core\Images\greenCircle.png" />
+    <None Remove="Core\Images\greenTick.png" />
     <None Remove="Core\Images\greyCircle.png" />
     <None Remove="Core\Images\loading.png" />
     <None Remove="Core\Images\pinkCircle.png" />
+    <None Remove="Core\Images\purpleDots.png" />
     <None Remove="Core\Images\specialCircle.png" />
     <None Remove="Core\Images\stopwatch.png" />
     <None Remove="Core\Images\upArrow.png" />
+    <None Remove="Core\Images\upArrowBlue.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +59,9 @@
     <Resource Include="Core\Images\greenCircle.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Core\Images\greenTick.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Core\Images\greyCircle.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -65,6 +71,9 @@
     <Resource Include="Core\Images\pinkCircle.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Core\Images\purpleDots.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Core\Images\specialCircle.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -72,6 +81,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Core\Images\upArrow.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Core\Images\upArrowBlue.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

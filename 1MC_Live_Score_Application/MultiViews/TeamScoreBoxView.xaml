@@ -7,7 +7,7 @@
              xmlns:converters="clr-namespace:_1MC_Live_Score_Application.Core.Converters" 
              xmlns:viewmodels="clr-namespace:_1MC_Live_Score_Application.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200">
+             Height="175" Width="175">
 
     <UserControl.Resources>
         <converters:StringToColorConverter x:Key="StringToColorConverter"/>
@@ -16,51 +16,56 @@
         <converters:OvertakesToLightConverter x:Key="OvertakesToLightConverter"/>
         <converters:PenaltiesToLightConverter x:Key="PenaltiesToLightConverter"/>
     </UserControl.Resources>
-    
+
     <Border Grid.Column="4" MinWidth="125" Name="BorderView"
                         Style="{StaticResource LiveScoreTeamBorderTheme}" 
-                        BorderBrush="{Binding TeamColor, 
-                    Converter={StaticResource StringToColorConverter}, 
-                    FallbackValue='#FFFFFFFF'}">
+                        BorderBrush="Transparent">
 
-        <StackPanel>
+        <Grid>
 
-            <TextBox Grid.Column="0" Foreground="White"
-                       Text="{Binding Name, FallbackValue=Team}"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="55*"/>
+                <RowDefinition Height="35*"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0" Foreground="White"
+                       Text="{Binding Name, FallbackValue=TEAM}"
                        Style="{StaticResource TeamNameTextBoxTheme}"/>
 
-            <TextBlock Grid.Column="1" Foreground="White"
-                       Text="{Binding TotalPoints, FallbackValue=0}"
-                       TextAlignment="Center" VerticalAlignment="Center"
-                           FontSize="30"/>
+            <Rectangle Width="125" Height="3" Fill="{Binding TeamColor, 
+                Converter={StaticResource StringToColorConverter}, 
+                    FallbackValue='#FFFFFFFF'}" 
+                           Margin="30,5" HorizontalAlignment="Center"
+                           Grid.Row="1"/>
 
-            <Grid>
+            <TextBlock Grid.Row="2" Foreground="White"
+                       Text="{Binding TotalPoints, FallbackValue=45}"
+                       TextAlignment="Center" VerticalAlignment="Bottom"
+                           FontSize="40" FontWeight="Bold"/>
+
+            <Grid Grid.Row="3" HorizontalAlignment="Center">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-
-                <Image Name="TotalScoreLight" Height="25" Margin="5"
-                       Source="{Binding HasHighestScore, Converter={StaticResource ScoreTypeToLightConverter}}"/>
 
                 <Image Name="FastestLapLight" Height="25" Margin="5" Grid.Column="1"
                        Source="{Binding HasFastestLap, Converter={StaticResource FastestLapToLightConverter}}"/>
 
                 <Image Name="MostOvertakesLight" Height="25" Margin="5" Grid.Column="2"
-                       Source="{Binding HasMostPositionChanges, Converter={StaticResource OvertakesToLightConverter}}"/>
+                       Source="{Binding MostOvertakesPoint, Converter={StaticResource OvertakesToLightConverter}}"/>
 
-                <Image Name="NoPenaltiesLight" Height="25" Margin="5" Grid.Column="3"
+                <Image Name="NoPenaltiesLight" Height="25" Margin="5" Grid.Column="0"
                        Source="{Binding HasNoPenalties, Converter={StaticResource PenaltiesToLightConverter}}"/>
 
             </Grid>
 
-        </StackPanel>
+        </Grid>
 
     </Border>
-    
-    
 
 </UserControl>

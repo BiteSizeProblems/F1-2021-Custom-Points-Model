@@ -7,7 +7,7 @@
         xmlns:multiviews="clr-namespace:_1MC_Live_Score_Application.MultiViews"
         mc:Ignorable="d"
         Title="LiveScore"
-        Height="225" Width="950"
+        Height="300" Width="950"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         WindowStyle="None"
@@ -63,7 +63,7 @@
 
             </Border>
 
-            <Border Grid.Row="1" BorderThickness="0,5,0,5" BorderBrush="Purple" Margin="5, 5, 0, 5">
+            <Border Grid.Row="1" Margin="5, 5, 0, 5">
 
                 <TextBlock Text="LIVE SCORE" TextWrapping="Wrap"
                            Foreground="Red" FontWeight="Bold"
@@ -73,20 +73,22 @@
             </Border>
 
             <Border Grid.Row="1" Grid.Column="1" 
-                    BorderThickness="0,5,0,5" BorderBrush="Purple" Margin="0,5">
+                    Margin="0,5">
 
                 <Border HorizontalAlignment="Center" Name="AllTeamsBorder"
+                        Margin="0" Padding="0" VerticalAlignment="Center"
                 Style="{StaticResource MainWindowBorderTheme}" BorderBrush="Transparent"
                 CornerRadius="15" Background="Transparent">
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
 
                         <multiviews:TeamScoreBoxView x:Name="TeamScoreBox1"/>
-                        
+
                         <multiviews:TeamScoreBoxView x:Name="TeamScoreBox2"/>
-                        
+
                         <multiviews:TeamScoreBoxView x:Name="TeamScoreBox3"/>
-                        
+
                         <multiviews:TeamScoreBoxView x:Name="TeamScoreBox4"/>
 
                     </StackPanel>

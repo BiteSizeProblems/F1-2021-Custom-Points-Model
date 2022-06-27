@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_1MC_Live_Score_Application"
+        xmlns:converters="clr-namespace:_1MC_Live_Score_Application.Core.Converters"
         xmlns:models="clr-namespace:_1MC_Live_Score_Application.Models" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="1MC Live Scoring" 
@@ -13,6 +14,7 @@
     <Window.Resources>
         <models:DriverDataModel x:Key="DriverDataModel"/>
         <models:SettingsModel x:Key="SettingsModel"/>
+        <converters:ConnectionStatusBoolToString x:Key="BoolConverter"/>
     </Window.Resources>
     
     <StackPanel>
@@ -35,8 +37,6 @@
                     Click="TeamsButton_Clicked"/>
                 
             </StackPanel>
-            
-            
 
             <TextBlock Style="{StaticResource HeaderTheme}" 
                    Text="1MC LIVE SCORING" Grid.Column="1"
@@ -51,7 +51,7 @@
                     Height="35" Width="150">
                 
                 <TextBlock x:Name="ConnectionStatusTB" 
-                           Text="{Binding IsUDPactive}" 
+                           Text="{Binding IsConnectionActive, Converter={StaticResource BoolConverter}}" 
                            FontFamily="{StaticResource Formula1FontStyle}"
                            Foreground="Gray"
                            TextAlignment="Center"
@@ -60,8 +60,6 @@
             </Border>
 
         </Grid>
-        
-        
 
         <Border Style="{StaticResource MainWindowBorderTheme}"
                 Background="DarkCyan" BorderBrush="DarkCyan"
@@ -81,8 +79,6 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
-
-                        
 
                         <Grid Margin="5">
 
@@ -236,89 +232,77 @@
                 Background="DarkCyan" BorderBrush="DarkCyan"
                 Height="350" CornerRadius="15" x:Name="DriverListBox">
 
-            <ScrollViewer>
+            <DataGrid x:Name="DriverList" 
+                          Background="DarkCyan" RowBackground="DarkCyan"
+                          AlternatingRowBackground="White"
+                          BorderThickness="0"
+                          GridLinesVisibility="None" HeadersVisibility="Column"
+                          HorizontalAlignment="Center" 
+                          Margin="10"
+                          VerticalScrollBarVisibility="Visible"
+                          AutoGenerateColumns="False"
+                          CanUserResizeColumns="False" CanUserResizeRows="False"
+                          CanUserAddRows="False"
+                          ItemsSource="{Binding Path=Driver}"
+                          ColumnHeaderStyle="{StaticResource DataGridHeaderTheme}"
+                          CellStyle="{StaticResource DataGridCellTheme}">
 
-                <StackPanel>
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentPosition}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.ItemContainerStyle>
 
-                    <TextBlock Style="{StaticResource SubHeaderTheme}"
-                               Text="DRIVERS" FontWeight="Bold"
-                               Margin="5" Padding="5"/>
+                <DataGrid.Columns>
 
-                    <DataGrid x:Name="DriverList" 
-                              Background="DarkCyan" RowBackground="DarkCyan"
-                              AlternatingRowBackground="White"
-                              BorderThickness="0"
-                              GridLinesVisibility="None" HeadersVisibility="Column"
-                              HorizontalAlignment="Center" 
-                              Margin="10"
-                              AutoGenerateColumns="False"
-                              CanUserResizeColumns="False" CanUserResizeRows="False"
-                              CanUserAddRows="False"
-                              ItemsSource="{Binding Path=Driver}"
-                              ColumnHeaderStyle="{StaticResource DataGridHeaderTheme}"
-                              CellStyle="{StaticResource DataGridCellTheme}"
-                              >
-
-                        <DataGrid.ItemContainerStyle>
-                            <Style TargetType="DataGridRow">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentPosition}" Value="0">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.ItemContainerStyle>
-
-                        <DataGrid.Columns>
-
-                            <DataGridTextColumn Header="ID"
+                    <DataGridTextColumn Header="ID"
                                                 Binding="{Binding ID}"
                                                 IsReadOnly="True" 
                                                 Width="50"/>
-                            
-                            <DataGridTextColumn Header="POS"
+
+                    <DataGridTextColumn Header="POS"
                                                 Binding="{Binding CurrentPosition}"
                                                 IsReadOnly="True" 
                                                 Width="50"/>
 
-                            <DataGridTextColumn Header=" + / - "
-                                                Binding="{Binding PositionChanges}"
+                    <DataGridTextColumn Header=" + / - "
+                                                Binding="{Binding NumOvertakes}"
                                                 IsReadOnly="True"/>
 
-                            <DataGridTextColumn Header="NAME"
+                    <DataGridTextColumn Header="NAME"
                                                 Binding="{Binding Name}"
                                                 Width="Auto"
                                                 IsReadOnly="False"/>
 
-                            <DataGridComboBoxColumn Header="TEAM" 
+                    <DataGridComboBoxColumn Header="TEAM" 
                                                     x:Name="TeamsComboBox" 
                                                     SelectedItemBinding="{Binding Team}"/>
 
-                            <DataGridTextColumn Header="ACTIVE"
+                    <DataGridTextColumn Header="ACTIVE"
                                                 Binding="{Binding IsActive}"
                                                 IsReadOnly="True"/>
 
-                            <DataGridTextColumn Header="CLEAN"
+                    <DataGridTextColumn Header="CLEAN"
                                                 Binding="{Binding HasNoPenalties}"
                                                 IsReadOnly="True"/>
 
-                            <DataGridTextColumn Header="FLAP"
+                    <DataGridTextColumn Header="FLAP"
                                                 Binding="{Binding HasFastestLap}"
                                                 IsReadOnly="True"/>
 
-                            <DataGridTextColumn Header="PTS"
+                    <DataGridTextColumn Header="PTS"
                                                 Binding="{Binding PointsByPosition}"
                                                 IsReadOnly="True"/>
 
 
 
-                        </DataGrid.Columns>
+                </DataGrid.Columns>
 
-                    </DataGrid>
-
-                </StackPanel>
-
-            </ScrollViewer>
+            </DataGrid>
 
         </Border>
 

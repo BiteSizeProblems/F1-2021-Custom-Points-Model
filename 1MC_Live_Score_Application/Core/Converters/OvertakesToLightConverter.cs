@@ -15,15 +15,15 @@ namespace _1MC_Live_Score_Application.Core.Converters
         private static string unknownPath = basePath + "greyCircle.png";
 
         // PRACTICE & QUALIFYING
-        private static string mostOvertakesPath = basePath + "upArrow.png";
+        private static string mostOvertakesPath = basePath + "upArrowBlue.png";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value != null)
             {
-                bool val = (bool)value;
+                int val = (int)value;
 
-                if (val == true)
+                if (val == 1)
                 {
                     return mostOvertakesPath;
                 }
