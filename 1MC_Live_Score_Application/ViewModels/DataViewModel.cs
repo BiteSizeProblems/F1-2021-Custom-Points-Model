@@ -1,13 +1,14 @@
 ﻿using _1MC_Live_Score_Application.Core.Utils;
 using _1MC_Live_Score_Application.Models;
-using _1MC_Live_Score_Application.Structs.F121;
+using _1MC_Live_Score_Application.Structs.F122;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Data;
-using static _1MC_Live_Score_Application.Structs.F121.Appendeces;
+using static _1MC_Live_Score_Application.Structs.F122.Appendeces;
 
 namespace _1MC_Live_Score_Application.ViewModels
 {
@@ -43,7 +44,7 @@ namespace _1MC_Live_Score_Application.ViewModels
         public PacketFinalClassificationData latestFinalClassificationDataPacket { get; set; }
         public PacketLapData latestLapDataPacket { get; set; }
         public PacketLobbyInfoData latestLobbyInfoDataPacket { get; set; }
-        public PacketParticipantsData latestParticipantDataPacket { get; set; }
+        public PacketParticipantData latestParticipantDataPacket { get; set; }
         public PacketSessionHistoryData latestSessionHistoryDataPacket { get; set; }
 
         private DataViewModel(): base()
@@ -76,7 +77,7 @@ namespace _1MC_Live_Score_Application.ViewModels
             UDPC.OnSessionHistoryDataReceive += UDPC_OnSessionHistoryDataReceive;
             UDPC.OnFinalClassificationDataReceive += UDPC_OnFinalClassificationDataReceive;
             UDPC.OnLobbyInfoDataReceive += UDPC_OnLobbyInfoDataReceive;
-            UDPC.OnParticipantsDataReceive += UDPC_OnParticipantsDataReceive;
+            UDPC.OnParticipantDataReceive += UDPC_OnParticipantDataReceive;
 
             UDPC.OnFinalClassificationDataReceive += StoreFinalClassificationData;
             UDPC.OnLapDataReceive += StoreLapData;
@@ -141,22 +142,6 @@ namespace _1MC_Live_Score_Application.ViewModels
             }
         }
 
-        // LAP DATA PACKET
-        private void UDPC_OnLapDataReceive(PacketLapData packet)
-        {
-            SettingsModel.IsConnectionActive = true;
-
-            for (int i = 0; i < 22; i++)
-            {
-                var lapData = packet.lapData[i];
-
-                Driver[i].CurrentPosition = lapData.carPosition;
-                Driver[i].GridPosition = lapData.gridPosition;
-                Driver[i].ResultStatus = lapData.resultStatus;
-                Driver[i].Penalties = TimeSpan.FromSeconds(lapData.penalties);
-            }
-        }
-
         // LOBBY INFO PACKET
         private void UDPC_OnLobbyInfoDataReceive(PacketLobbyInfoData packet)
         {
@@ -166,12 +151,12 @@ namespace _1MC_Live_Score_Application.ViewModels
 
             for (int i = 0; i < 22; i++)
             {
-                var lobbyData = packet.lobbyPlayers[i];
+                var lobbyData = packet.m_lobbyPlayers[i];
 
                 Driver[i].Index = i;
-                Driver[i].CarID = lobbyData.carNumber;
+                Driver[i].CarID = lobbyData.m_carNumber;
 
-                if (lobbyData.aiControlled == 1)
+                if (lobbyData.m_aiControlled == 1)
                 {
                     Driver[i].IsAI = true;
                 }
@@ -179,12 +164,46 @@ namespace _1MC_Live_Score_Application.ViewModels
                 {
                     Driver[i].IsAI = false;
                 }
-                
+
+                // Driver Names
+                string thisName = "";
+
+                for (int j = 0; j < lobbyData.m_name.Length; j++)
+                {
+                    var thisChar = lobbyData.m_name[j];
+
+                    thisName += thisChar.ToString();
+                }
+
+                if (thisName.Contains("Player") == true)
+                {
+                    Driver[i].Name = "Bad Name";
+                }
+                else
+                {
+                    Driver[i].Name = thisName.ToString();
+                }
+            }
+        }
+
+        // LAP DATA PACKET
+        private void UDPC_OnLapDataReceive(PacketLapData packet)
+        {
+            SettingsModel.IsConnectionActive = true;
+
+            for (int i = 0; i < 22; i++)
+            {
+                var lapData = packet.m_lapData[i];
+
+                Driver[i].CurrentPosition = lapData.m_carPosition;
+                Driver[i].GridPosition = lapData.m_gridPosition;
+                Driver[i].ResultStatus = lapData.m_resultStatus;
+                Driver[i].Penalties = TimeSpan.FromSeconds(lapData.m_penalties);
             }
         }
 
         // PARTICIPANT PACKET
-        private void UDPC_OnParticipantsDataReceive(PacketParticipantsData packet)
+        private void UDPC_OnParticipantDataReceive(PacketParticipantData packet)
         {
             for (int i = 0; i < 22; i++)
             {
@@ -210,6 +229,24 @@ namespace _1MC_Live_Score_Application.ViewModels
                     Driver[i].IsAI = false;
                 }
 
+                // Driver Names
+                string thisName = "";
+
+                for (int j = 0; j < participantData.m_name.Length; j++)
+                {
+                    var thisChar = participantData.m_name[j];
+
+                    thisName += thisChar.ToString();
+                }
+
+                if (thisName.Contains("Player") == true)
+                {
+                    Driver[i].Name = "Bad Name";
+                }
+                else
+                {
+                    Driver[i].Name = thisName.ToString();
+                }
             }
         }
 
@@ -258,7 +295,7 @@ namespace _1MC_Live_Score_Application.ViewModels
         {
             latestSessionHistoryDataPacket = packet;
         }
-        private void StoreParticipantData(PacketParticipantsData packet)
+        private void StoreParticipantData(PacketParticipantData packet)
         {
             latestParticipantDataPacket = packet;
         }

@@ -10,15 +10,15 @@ namespace _1MC_Live_Score_Application.Structs.F122
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct LobbyInfoData
     {
-        byte m_aiControlled;            // Whether the vehicle is AI (1) or Human (0) controlled
-        byte m_teamId;                  // Team id - see appendix (255 if no team currently selected)
-        byte m_nationality;             // Nationality of the driver
+        public byte m_aiControlled;            // Whether the vehicle is AI (1) or Human (0) controlled
+        public byte m_teamId;                  // Team id - see appendix (255 if no team currently selected)
+        public byte m_nationality;             // Nationality of the driver
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)]
-        char[] m_name;        // Name of participant in UTF-8 format – null terminated
-                                // Will be truncated with ... (U+2026) if too long
-        byte m_carNumber;               // Car number of the player
-        byte m_readyStatus;             // 0 = not ready, 1 = ready, 2 = spectating
+        public char[] m_name;        // Name of participant in UTF-8 format – null terminated
+                                     // Will be truncated with ... (U+2026) if too long
+        public byte m_carNumber;               // Car number of the player
+        public byte m_readyStatus;             // 0 = not ready, 1 = ready, 2 = spectating
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -27,9 +27,9 @@ namespace _1MC_Live_Score_Application.Structs.F122
         PacketHeader m_header;                       // Header
 
         // Packet specific data
-        byte m_numPlayers;               // Number of players in the lobby data
+        public byte m_numPlayers;               // Number of players in the lobby data
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 22)]
-        LobbyInfoData[] m_lobbyPlayers;
+        public LobbyInfoData[] m_lobbyPlayers;
     }
 }

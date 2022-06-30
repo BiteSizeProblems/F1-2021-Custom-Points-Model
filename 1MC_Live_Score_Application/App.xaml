@@ -20,6 +20,7 @@
 
                 <!--// CONTENT DISPLAY THEMES //-->
 
+                <ResourceDictionary Source="./Core/Styles/FormulaOneVersionTheme.xaml"/>
                 <ResourceDictionary Source="./Core/Styles/DataGridTheme.xaml"/>
                 <ResourceDictionary Source="./Core/Styles/RadioButtonTheme.xaml"/>
                 <ResourceDictionary Source="./Core/Styles/ButtonTheme.xaml"/>

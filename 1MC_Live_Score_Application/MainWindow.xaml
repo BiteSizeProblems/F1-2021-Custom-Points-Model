@@ -30,6 +30,9 @@
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
 
+                <TextBlock Text="F122" 
+                           Style="{StaticResource FormulaOneVersionTheme}"/>
+
                 <Button x:Name="TeamSummaryButton" 
                     Content="TEAMS"
                     Style="{StaticResource MenuButtonTheme2}"
@@ -38,7 +41,8 @@
                 
             </StackPanel>
 
-            <TextBlock Style="{StaticResource HeaderTheme}" 
+            <TextBlock Style="{StaticResource FormulaOneVersionTheme}" 
+                       Padding="5"
                    Text="1MC LIVE SCORING" Grid.Column="1"
                    />
 

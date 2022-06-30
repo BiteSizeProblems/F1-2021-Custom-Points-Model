@@ -3,8 +3,8 @@ using System.Net.Sockets;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Timers;
-using _1MC_Live_Score_Application.Structs.F121;
-using static _1MC_Live_Score_Application.Structs.F121.Appendeces;
+using _1MC_Live_Score_Application.Structs.F122;
+using static _1MC_Live_Score_Application.Structs.F122.Appendeces;
 
 namespace _1MC_Live_Score_Application.Core.UDP
 {
@@ -40,17 +40,17 @@ namespace _1MC_Live_Score_Application.Core.UDP
         // Delegates
         public delegate void SessionDataReceiveDelegate(PacketSessionData packet);
         public delegate void LapDataReceiveDelegate(PacketLapData packet);
-        public delegate void ParticipantsDataReceiveDelegate(PacketParticipantsData packet);
+        public delegate void ParticipantDataReceiveDelegate(PacketParticipantData packet);
         public delegate void FinalClassificationDataReceiveDelegate(PacketFinalClassificationData packet);
         public delegate void LobbyInfoDataReceiveDelegate(PacketLobbyInfoData packet);
         public delegate void SessionHistoryDataReceiveDelegate(PacketSessionHistoryData packet);
 
-        public PacketParticipantsData LastParticipantsPacket { get; private set; }
+        public PacketParticipantData LastParticipantsPacket { get; private set; }
 
         // Packet events
         public event SessionDataReceiveDelegate OnSessionDataReceive;
         public event LapDataReceiveDelegate OnLapDataReceive;
-        public event ParticipantsDataReceiveDelegate OnParticipantsDataReceive;
+        public event ParticipantDataReceiveDelegate OnParticipantDataReceive;
         public event FinalClassificationDataReceiveDelegate OnFinalClassificationDataReceive;
         public event LobbyInfoDataReceiveDelegate OnLobbyInfoDataReceive;
         public event SessionHistoryDataReceiveDelegate OnSessionHistoryDataReceive;
@@ -118,27 +118,27 @@ namespace _1MC_Live_Score_Application.Core.UDP
                 // Cast the packet to the correct type based on the ID.
                 switch (header.packetId)
                 {
-                    case PacketTypes.Session:
+                    case (byte)PacketTypes.Session:
                         PacketSessionData sessionData = (PacketSessionData)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketSessionData));
                         OnSessionDataReceive?.Invoke(sessionData);
                         break;
-                    case PacketTypes.LapData:
+                    case (byte)PacketTypes.LapData:
                         PacketLapData lapData = (PacketLapData)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketLapData));
                         OnLapDataReceive?.Invoke(lapData);
                         break;
-                    case PacketTypes.Participants:
-                        PacketParticipantsData participantsData = (PacketParticipantsData)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketParticipantsData));
-                        OnParticipantsDataReceive?.Invoke(participantsData);
+                    case (byte)PacketTypes.Participants:
+                        PacketParticipantData participantsData = (PacketParticipantData)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketParticipantData));
+                        OnParticipantDataReceive?.Invoke(participantsData);
                         break;
-                    case PacketTypes.FinalClassification:
+                    case (byte)PacketTypes.FinalClassification:
                         PacketFinalClassificationData finalClassificationData = (PacketFinalClassificationData)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketFinalClassificationData));
                         OnFinalClassificationDataReceive?.Invoke(finalClassificationData);
                         break;
-                    case PacketTypes.LobbyInfo:
+                    case (byte)PacketTypes.LobbyInfo:
                         PacketLobbyInfoData lobbyInfoData = (PacketLobbyInfoData)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketLobbyInfoData));
                         OnLobbyInfoDataReceive?.Invoke(lobbyInfoData);
                         break;
-                    case PacketTypes.SessionHistory:
+                    case (byte)PacketTypes.SessionHistory:
                         PacketSessionHistoryData sessionHistoryData = (PacketSessionHistoryData)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PacketSessionHistoryData));
                         OnSessionHistoryDataReceive?.Invoke(sessionHistoryData);
                         break;

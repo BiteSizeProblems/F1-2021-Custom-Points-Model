@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static _1MC_Live_Score_Application.Structs.F121.Appendeces;
+using static _1MC_Live_Score_Application.Structs.F122.Appendeces;
 
 namespace _1MC_Live_Score_Application.Models
 {
