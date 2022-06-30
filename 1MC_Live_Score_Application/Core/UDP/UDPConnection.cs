@@ -146,7 +146,7 @@ namespace _1MC_Live_Score_Application.Core.UDP
             }
             catch
             {
-                Console.WriteLine("Failed to receive F1 2020 packet.");
+                Console.WriteLine("Failed to receive F1 2022 packet.");
             }
             finally
             {

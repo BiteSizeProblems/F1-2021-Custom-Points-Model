@@ -13,10 +13,11 @@ namespace _1MC_Live_Score_Application.Models
     public class DriverDataModel : ObservableObject
     {
         // Args CTOR
-        public DriverDataModel(int i, int t)
+        public DriverDataModel(int i, int t, int c)
         {
             this.ID = i;
             this.Team = t;
+            this.CarID = c;
         }
 
         // No-Args CTOR
@@ -25,11 +26,39 @@ namespace _1MC_Live_Score_Application.Models
 
         }
 
+        private int _index;
+        public int Index
+        {
+            get { return _index; }
+            set { SetField(ref _index, value, nameof(Index)); }
+        }
+
         private int _iD;
         public int ID
         {
             get { return _iD; }
             set { SetField(ref _iD, value, nameof(ID)); }
+        }
+
+        private int _carID;
+        public int CarID
+        {
+            get { return _carID; }
+            set { SetField(ref _carID, value, nameof(CarID)); }
+        }
+
+        private bool _isAI;
+        public bool IsAI
+        {
+            get { return _isAI; }
+            set { SetField(ref _isAI, value, nameof(IsAI)); }
+        }
+
+        private bool _isUDPPublic;
+        public bool IsUDPPublic
+        {
+            get { return _isUDPPublic; }
+            set { SetField(ref _isUDPPublic, value, nameof(IsUDPPublic)); }
         }
 
         private string _name;
@@ -77,8 +106,8 @@ namespace _1MC_Live_Score_Application.Models
         private int _numOvertakes;
         public int NumOvertakes
         {
-            get { return _positionChanges; }
-            set { SetField(ref _positionChanges, value, nameof(PositionChanges)); }
+            get { return _numOvertakes; }
+            set { SetField(ref _numOvertakes, value, nameof(NumOvertakes)); }
         }
 
         private int _pointsByPosition;

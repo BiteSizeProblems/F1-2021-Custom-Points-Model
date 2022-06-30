@@ -28,6 +28,11 @@ namespace _1MC_Live_Score_Application.Structs.F121
         public char[] name;
 
         /// <summary>
+        /// Car number of the player
+        /// </summary>
+        public byte carNumber;
+
+        /// <summary>
         /// 0 = not ready, 1 = ready, 2 = spectating
         /// </summary>
         public byte readyStatus;

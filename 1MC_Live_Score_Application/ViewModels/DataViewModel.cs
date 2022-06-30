@@ -75,23 +75,27 @@ namespace _1MC_Live_Score_Application.ViewModels
             UDPC.OnLapDataReceive += UDPC_OnLapDataReceive;
             UDPC.OnSessionHistoryDataReceive += UDPC_OnSessionHistoryDataReceive;
             UDPC.OnFinalClassificationDataReceive += UDPC_OnFinalClassificationDataReceive;
+            UDPC.OnLobbyInfoDataReceive += UDPC_OnLobbyInfoDataReceive;
+            UDPC.OnParticipantsDataReceive += UDPC_OnParticipantsDataReceive;
 
             UDPC.OnFinalClassificationDataReceive += StoreFinalClassificationData;
             UDPC.OnLapDataReceive += StoreLapData;
             UDPC.OnLobbyInfoDataReceive += StoreLobbyInfoData;
             UDPC.OnSessionHistoryDataReceive += StoreSessionHistoryData;
-            //UDPC.OnSessionDataReceive += StoreSessionData;
             //UDPC.OnParticipantsDataReceive += StoreParticipantData;
+            //UDPC.OnSessionDataReceive += StoreSessionData;
 
             fastTimer2 = new Timer(AssignTeamValues, null, 0, 1000);
-            fastTimer = new Timer(GetDriverData, null, 0, 1000);
-            mediumTimer = new Timer(CallDriversPerTeam, null, 0, 1000);
             slowTimer = new Timer(CalculateTeamPoints, null, 0, 3000);
 
+            if (SettingsModel.IsConnectionActive == true)
+            {
+                fastTimer = new Timer(GetDriverData, null, 0, 1000);
+                mediumTimer = new Timer(CallDriversPerTeam, null, 0, 1000);
+            }
         }
 
         // ASSIGN TEAM COLORS
-
         public void CreateTeamColors()
         {
             Team[0].TeamColor = SettingsModel.Team1Color;
@@ -101,7 +105,6 @@ namespace _1MC_Live_Score_Application.ViewModels
         }
 
         // GET DRIVERS PER TEAM
-
         private void CallDriversPerTeam(object? state)
         {
             GetDriversPerTeam();
@@ -139,7 +142,6 @@ namespace _1MC_Live_Score_Application.ViewModels
         }
 
         // LAP DATA PACKET
-
         private void UDPC_OnLapDataReceive(PacketLapData packet)
         {
             SettingsModel.IsConnectionActive = true;
@@ -152,6 +154,62 @@ namespace _1MC_Live_Score_Application.ViewModels
                 Driver[i].GridPosition = lapData.gridPosition;
                 Driver[i].ResultStatus = lapData.resultStatus;
                 Driver[i].Penalties = TimeSpan.FromSeconds(lapData.penalties);
+            }
+        }
+
+        // LOBBY INFO PACKET
+        private void UDPC_OnLobbyInfoDataReceive(PacketLobbyInfoData packet)
+        {
+            Debug.WriteLine("Lobby Info Packet Received");
+
+            SettingsModel.IsConnectionActive = true;
+
+            for (int i = 0; i < 22; i++)
+            {
+                var lobbyData = packet.lobbyPlayers[i];
+
+                Driver[i].Index = i;
+                Driver[i].CarID = lobbyData.carNumber;
+
+                if (lobbyData.aiControlled == 1)
+                {
+                    Driver[i].IsAI = true;
+                }
+                else
+                {
+                    Driver[i].IsAI = false;
+                }
+                
+            }
+        }
+
+        // PARTICIPANT PACKET
+        private void UDPC_OnParticipantsDataReceive(PacketParticipantsData packet)
+        {
+            for (int i = 0; i < 22; i++)
+            {
+                var participantData = packet.m_participants[i];
+
+                Driver[i].CarID = participantData.m_raceNumber;
+
+                if (participantData.m_yourTelemetry == 0)
+                {
+                    Driver[i].IsUDPPublic = false;
+                }
+                else
+                {
+                    Driver[i].IsUDPPublic = true;
+                }
+
+                if (participantData.m_aiControlled == 1)
+                {
+                    Driver[i].IsAI = true;
+                }
+                else
+                {
+                    Driver[i].IsAI = false;
+                }
+
             }
         }
 
@@ -180,6 +238,8 @@ namespace _1MC_Live_Score_Application.ViewModels
         // FINAL CLASSIFICATION DATA PACKET
         private void UDPC_OnFinalClassificationDataReceive(PacketFinalClassificationData packet)
         {
+            Debug.WriteLine("Final Classification Packet Received");
+
             SettingsModel.IsConnectionActive = false;
 
             for (int i = 0; i < latestFinalClassificationDataPacket.m_classificationData.Length; i++)
@@ -392,7 +452,7 @@ namespace _1MC_Live_Score_Application.ViewModels
 
         private void CalculateTeamPointsByPositionChange()
         {
-            bool overtakesDuplicates = false;
+            bool overtakesDuplicates;
 
             var overtakesArray = SettingsModel.OvertakesArray;
 
@@ -405,16 +465,6 @@ namespace _1MC_Live_Score_Application.ViewModels
             else
             {
                 overtakesDuplicates = false;
-            }
-
-            foreach (int i in overtakesArray)
-            {
-                Debug.WriteLine(" 0 " + overtakesArray[0]);
-                Debug.WriteLine(" 1 " + overtakesArray[1]);
-                Debug.WriteLine(" 2 " + overtakesArray[2]);
-                Debug.WriteLine(" 3 " + overtakesArray[3]);
-
-                
             }
 
             for (int i = 0; i < Team.Count; i++)
@@ -467,6 +517,9 @@ namespace _1MC_Live_Score_Application.ViewModels
             bool[] driverHasFastestLap = { false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
             int[] driverOvertakes = { -2, 1, -3, 3, 2, -10, 1, -1, 2, 4, 0, 0, 6, 0, 0, 0, 0, 0, 12, 0, 0, 0 };
             bool[] driverHasNoPenalties = { false, true, true, false, true, false, true, true, true, true, false, true, false, true, false, false, true, false, false, true, true, false };
+            int[] twoTeams = { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
+            int[] threeTeams = { 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1};
+            int[] fourTeams = { 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2};
 
             // Assign drivers names and points.
             for (int i = 0; i < 22; i++)
@@ -478,9 +531,21 @@ namespace _1MC_Live_Score_Application.ViewModels
                 Driver[i].HasNoPenalties = driverHasNoPenalties[i];
                 Driver[i].PositionChanges = driverOvertakes[i];
 
-                if (Driver[i].IsActive == true)
-                {
+                
                     Driver[i].PointsByPosition = PositionToPointsConverter.GetPoints(SettingsModel.PointsModel, Driver[i].CurrentPosition, Driver[i].IsActive);
+                
+
+                if (SettingsModel.NumTeams == 2)
+                {
+                    Driver[i].Team = twoTeams[i];
+                }
+                else if (SettingsModel.NumTeams == 3)
+                {
+                    Driver[i].Team = threeTeams[i];
+                }
+                else
+                {
+                    Driver[i].Team = fourTeams[i];
                 }
             }
         }
