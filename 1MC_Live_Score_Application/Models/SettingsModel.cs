@@ -36,6 +36,13 @@ namespace _1MC_Live_Score_Application.Models
 
         public int[] AvailableTeams;
 
+        private bool _simulationActive = false;
+        public bool SimulationActive
+        {
+            get { return _simulationActive; }
+            set { SetField(ref _simulationActive, value, nameof(SimulationActive)); }
+        }
+
         private bool _isConnectionActive = false;
         public bool IsConnectionActive
         {

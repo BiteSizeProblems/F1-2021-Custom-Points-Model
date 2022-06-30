@@ -94,6 +94,8 @@ namespace _1MC_Live_Score_Application
         private void Simulate_Checked(object sender, RoutedEventArgs e)
         {
             DataVM.SimulateDrivers();
+
+            DataVM.SettingsModel.SimulationActive = true;
         }
 
         private void ConfirmAndDisplay_Checked(object sender, RoutedEventArgs e)

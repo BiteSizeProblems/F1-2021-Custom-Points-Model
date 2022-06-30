@@ -25,11 +25,11 @@ namespace _1MC_Live_Score_Application.Core.Converters
 
                 if (val == true)
                 {
-                    return cleanDrivingPath;
+                    return unknownPath;
                 }
                 else
                 {
-                    return unknownPath;
+                    return cleanDrivingPath;
                 }
 
             }

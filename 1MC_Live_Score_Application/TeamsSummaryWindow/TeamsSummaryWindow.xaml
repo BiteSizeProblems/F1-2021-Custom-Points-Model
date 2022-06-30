@@ -76,8 +76,8 @@
                                                 Binding="{Binding MostOvertakesPoint}"
                                     MinWidth="50"/>
 
-                <DataGridTextColumn Header="HAS NO PEN"
-                                                Binding="{Binding HasNoPenalties}"
+                <DataGridTextColumn Header="HAS PEN"
+                                                Binding="{Binding HasPenalty}"
                                     MinWidth="50"/>
                 
                 <DataGridTextColumn Header="NO PEN PTS"

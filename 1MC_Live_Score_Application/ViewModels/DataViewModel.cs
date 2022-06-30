@@ -88,7 +88,7 @@ namespace _1MC_Live_Score_Application.ViewModels
             fastTimer2 = new Timer(AssignTeamValues, null, 0, 1000);
             slowTimer = new Timer(CalculateTeamPoints, null, 0, 3000);
 
-            if (SettingsModel.IsConnectionActive == true)
+            if (SettingsModel.SimulationActive == false)
             {
                 fastTimer = new Timer(GetDriverData, null, 0, 1000);
                 mediumTimer = new Timer(CallDriversPerTeam, null, 0, 1000);
@@ -228,7 +228,7 @@ namespace _1MC_Live_Score_Application.ViewModels
 
                 var lapRef = i + 1;
 
-                if (lapRef == packet.m_bestLapTimeLapNum)
+                if (lapRef == packet.m_bestLapTimeLapNum && sessionHistoryData.m_lapTimeInMS != 0)
                 {
                     Driver[carId].FastestLapTime = TimeSpan.FromMilliseconds(sessionHistoryData.m_lapTimeInMS);
                 }
@@ -242,9 +242,9 @@ namespace _1MC_Live_Score_Application.ViewModels
 
             SettingsModel.IsConnectionActive = false;
 
-            for (int i = 0; i < latestFinalClassificationDataPacket.m_classificationData.Length; i++)
+            for (int i = 0; i < packet.m_classificationData.Length; i++)
             {
-                var finalData = latestFinalClassificationDataPacket.m_classificationData[i];
+                var finalData = packet.m_classificationData[i];
 
                 Driver[i].CurrentPosition = finalData.m_position;
                 Driver[i].GridPosition = finalData.m_gridPosition;
@@ -325,11 +325,11 @@ namespace _1MC_Live_Score_Application.ViewModels
 
                     if (Driver[i].Penalties == TimeSpan.Zero)
                     {
-                        Driver[i].HasNoPenalties = true;
+                        Driver[i].HasPenalty = false;
                     }
                     else
                     {
-                        Driver[i].HasNoPenalties = false;
+                        Driver[i].HasPenalty = true;
                     }
 
                     if (Driver[i].GridPosition < Driver[i].CurrentPosition)
@@ -426,11 +426,11 @@ namespace _1MC_Live_Score_Application.ViewModels
             {
                 if (Team[i].HasPenalty == true)
                 {
-                    Team[i].NoPenaltiesPoint = Team[i].NumActiveDrivers;
+                    Team[i].NoPenaltiesPoint = 0;
                 }
                 else
                 {
-                    Team[i].NoPenaltiesPoint = 0;
+                    Team[i].NoPenaltiesPoint = Team[i].NumActiveDrivers;
                 }
             }
         }
@@ -528,7 +528,7 @@ namespace _1MC_Live_Score_Application.ViewModels
                 Driver[i].IsActive = driverIsActive[i];
                 Driver[i].CurrentPosition = i + 1;
                 Driver[i].HasFastestLap = driverHasFastestLap[i];
-                Driver[i].HasNoPenalties = driverHasNoPenalties[i];
+                Driver[i].HasPenalty = driverHasNoPenalties[i];
                 Driver[i].PositionChanges = driverOvertakes[i];
 
                 

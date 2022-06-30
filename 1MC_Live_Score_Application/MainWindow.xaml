@@ -264,6 +264,11 @@
                                                 IsReadOnly="True" 
                                                 Width="50"/>
 
+                    <DataGridTextColumn Header="AI"
+                                                Binding="{Binding IsAI}"
+                                                IsReadOnly="True" 
+                                                Width="60"/>
+
                     <DataGridTextColumn Header="POS"
                                                 Binding="{Binding CurrentPosition}"
                                                 IsReadOnly="True" 
@@ -286,8 +291,8 @@
                                                 Binding="{Binding IsActive}"
                                                 IsReadOnly="True"/>
 
-                    <DataGridTextColumn Header="CLEAN"
-                                                Binding="{Binding HasNoPenalties}"
+                    <DataGridTextColumn Header="PEN"
+                                                Binding="{Binding HasPenalty}"
                                                 IsReadOnly="True"/>
 
                     <DataGridTextColumn Header="FLAP"

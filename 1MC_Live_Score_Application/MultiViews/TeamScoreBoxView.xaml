@@ -60,7 +60,7 @@
                        Source="{Binding MostOvertakesPoint, Converter={StaticResource OvertakesToLightConverter}}"/>
 
                 <Image Name="NoPenaltiesLight" Height="25" Margin="5" Grid.Column="0"
-                       Source="{Binding HasNoPenalties, Converter={StaticResource PenaltiesToLightConverter}}"/>
+                       Source="{Binding HasPenalty, Converter={StaticResource PenaltiesToLightConverter}}"/>
 
             </Grid>
 
